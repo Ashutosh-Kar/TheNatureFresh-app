@@ -1,10 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mushroomm/info/customwidgets.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
+import 'package:mushroomm/pages/categoriespage.dart';
+import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -26,12 +27,18 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Mush(),
+        initialRoute: Mush.id,
+        routes: {
+          Mush.id: (context)=>Mush(),
+          CategoryPage.id: (context)=>CategoryPage(),
+          PaymentPage.id:  (context)=>PaymentPage(),
+        },
       ),
     );
   }
 }
 class Mush extends StatefulWidget {
+  static String id='first_page';
   @override
   _MushState createState() => _MushState();
 }
@@ -74,7 +81,10 @@ class _MushState extends State<Mush> {
               children: [
                 IconButton(
                   icon: Icon(Icons.shopping_basket, size: 28,),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, PaymentPage.id); //for time being
+                    //TODO:This will navigate to Cart page once it's made.
+                  },
 
                 ),
                 Positioned(
@@ -200,6 +210,7 @@ class _MushState extends State<Mush> {
                             text1: 'Mushroom',),
                           onTap: (){
                             print('Mushroom');
+                            Navigator.pushNamed(context, CategoryPage.id);
                           },),
                         GestureDetector(
                           child: CustomCardCategories(
@@ -207,6 +218,8 @@ class _MushState extends State<Mush> {
                             text1: 'Spawn',),
                           onTap: (){
                             print('spawn');
+                            print('Mushroom');
+                            Navigator.pushNamed(context, CategoryPage.id);
                           },),
                         GestureDetector(
                           child: CustomCardCategories(
@@ -214,6 +227,8 @@ class _MushState extends State<Mush> {
                             text1: 'Bags',),
                           onTap: (){
                             print('Bags');
+                            print('Mushroom');
+                            Navigator.pushNamed(context, CategoryPage.id);
                           },),
                       ],
                     ),
