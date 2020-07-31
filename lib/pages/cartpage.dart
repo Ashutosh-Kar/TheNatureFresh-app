@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mushroomm/pages/paymentpage.dart';
-import 'categoriespage.dart';
 import 'package:mushroomm/info/customwidgets.dart';
+import 'package:mushroomm/models/cart.dart';
+import 'package:mushroomm/models/product.dart';
+import 'package:mushroomm/pages/paymentpage.dart';
+import 'package:provider/provider.dart';
+
+import 'categoriespage.dart';
 
 class CartPage extends StatefulWidget {
-  static String id='cart_page';
+  static String id = 'cart_page';
+
   @override
   _CartPageState createState() => _CartPageState();
 }
@@ -63,18 +68,25 @@ class _CartPageState extends State<CartPage> {
       ),
     );
   }
-  Widget createTable() {
+
+  Widget createTable({List<Product> products}) {
     List<TableRow> rows = [];
-    for (int i = 0; i < 4; ++i) {
+    products.forEach((product) =>
+    {
       rows.add(TableRow(children: [
-        CartItems(),
-      ]));
-    }
+        CartItems(
+          product: product,
+          onTap: () => {},
+        ),
+      ]))
+    });
+
     return Table(children: rows);
   }
 
   @override
   Widget build(BuildContext context) {
+    Cart cart = Provider.of<Cart>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
       body:
@@ -92,23 +104,23 @@ class _CartPageState extends State<CartPage> {
                     GestureDetector(
                       child: Icon(Icons.arrow_back_ios),
                       onTap: (){
-                          Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                     ),
                     Text('Cart',style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                    ) ,),
+                    ),),
                     GestureDetector(
                       child: Icon(Icons.shopping_basket),
-                      onTap: (){
-                          Navigator.pushNamed(context, PaymentPage.id);
+                      onTap: () {
+                        Navigator.pushNamed(context, PaymentPage.id);
                       },),
                   ],
                 ),
               ),
               userDetails(),
-              createTable(),
+              createTable(products: cart.products),
               DeliveryCard(),
             ],
           ),
@@ -119,41 +131,47 @@ class _CartPageState extends State<CartPage> {
 }
 
 //Layout of widget for each cart item
-class CartItems extends StatefulWidget {
-  @override
-  _CartItemsState createState() => _CartItemsState();
-}
+class CartItems extends StatelessWidget {
+  Product product;
+  Function onTap;
 
-class _CartItemsState extends State<CartItems> {
+  CartItems({@required this.product, @required this.onTap});
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top:20.0,bottom: 20.0,left: 15,right: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              VarietyImageCard(imgg: 'https://static.toiimg.com/thumb/74866653.cms?width=680&height=512&imgsize=222332'),
-              SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Mushroom Name',style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-                  AddItemIconBar(),
-                ],
-              ),
-            ],
-          ),
-          Text('Rs 500'),//Original price to be calculated and produced here
-        ],
+    return ChangeNotifierProvider.value(
+      value: product,
+      child: Padding(
+        padding: const EdgeInsets.only(
+            top: 20.0, bottom: 20.0, left: 15, right: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                VarietyImageCard(imgg: product.image_url),
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(product.item_name, style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+                    AddItemIconBar(),
+                  ],
+                ),
+              ],
+            ),
+            Text('Rs ${product.price}'),
+            //Original price to be calculated and produced here
+          ],
+        ),
       ),
     );
   }
 }
+
 
 //Layout for CartPage Payment details (total payment details to be passed here)
 class DeliveryCard extends StatefulWidget {
