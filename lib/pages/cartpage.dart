@@ -37,10 +37,10 @@ class _CartPageState extends State<CartPage> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),),
-                          SizedBox(height:15),
+                          SizedBox(height:8),
                           Text('A-13 Noida, Delhi-114672', style: TextStyle(
                             color: Colors.white,
-                            fontSize: 15,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),),
                         ],
