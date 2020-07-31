@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mushroomm/info/customwidgets.dart';
@@ -7,6 +7,7 @@ import 'package:mushroomm/models/product.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
 import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:provider/provider.dart';
+
 import 'pages/cartpage.dart';
 
 void main() {
@@ -18,9 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        InheritedProvider<Cart>(
+        ChangeNotifierProvider<Cart>(
           create: (_) => Cart(),
-        )
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -39,41 +40,57 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class Mush extends StatefulWidget {
-  static String id='first_page';
+  static String id = 'first_page';
+
   @override
   _MushState createState() => _MushState();
 }
 
 class _MushState extends State<Mush> {
+  List<Product> products;
+  int itemCount;
+
+  Future<void> getProducts() async {
+    var snapshots =
+        await Firestore.instance.collection('products').getDocuments();
+    setState(() {
+      snapshots.documents.forEach((element) {
+        products.add(Product.fromJson(element.data));
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    products = List<Product>();
+    getProducts();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Product product = Product(
-        id: 1,
-        item_name: 'mushroom',
-        image_url: 'gmail.com',
-        item_description: 'description',
-        qty_available: 100,
-        price: 500
-    );
-
-    var cart = Provider.of<Cart>(context);
-    cart.addProduct(product: product);
-    print(jsonEncode(cart));
-    cart.addProduct(product: product);
-    print(jsonEncode(cart));
-
-    //final Size size = MediaQuery.of(context).size;
+    print('build method called');
+    itemCount = context.watch<Cart>().itemCount;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade300,
         elevation: 0,
-        leading: Icon(Icons.clear_all, size: 28,),
+        leading: Icon(
+          Icons.clear_all,
+          size: 28,
+        ),
         actions: <Widget>[
-          GestureDetector(child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.location_on, size: 28,),
-          ),
+          GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.location_on,
+                size: 28,
+              ),
+            ),
             onTap: () {
               //TODO: navigate to location page
             },),
@@ -97,13 +114,11 @@ class _MushState extends State<Mush> {
                             color: Colors.red,
                             shape: BoxShape.circle
                         ),
-                        child: Center(child: Consumer<Cart>(
-                          builder: (context, cart, child) {
-                            return Text(cart.itemCount.toString() ?? '0',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),);
-                          },)))
+                        child: Center(child:
+                        Text(itemCount.toString() ?? '0',
+                          style: TextStyle(
+                              color: Colors.white
+                          ),)))
                 )
               ],
             ),
@@ -122,7 +137,8 @@ class _MushState extends State<Mush> {
                   [
                     TextField(
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search, color: Colors.grey.shade500),
+                        prefixIcon: Icon(
+                            Icons.search, color: Colors.grey.shade500),
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Search fresh mushrooms, seeds & more',
@@ -132,11 +148,11 @@ class _MushState extends State<Mush> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onChanged: (value){
+                      onChanged: (value) {
                         print('Text Input');
                       },),
                     Padding(
-                      padding: const EdgeInsets.only(top:20.0, bottom: 20.0),
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                       child: Text('Popular Searches', style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -144,57 +160,16 @@ class _MushState extends State<Mush> {
                       ),
                     ),
                     SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                CustomCardPopular(
-                                  m_image: 'https://secureservercdn.net/50.62.174.113/p7w.5c4.myftpupload.com/wp-content/uploads/revslider/herbal/coonfresh-gallery-slide-1.png',
-                                  m_price1: 'Rs 40/120g',
-                                ),
-                                Text('Mushroom Spawn',style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                CustomCardPopular(m_image: 'https://secureservercdn.net/50.62.174.113/p7w.5c4.myftpupload.com/wp-content/uploads/revslider/herbal/coonfresh-gallery-slide-1.png',
-                                  m_price1: 'Rs 50/100g',),
-                                Text('Mushroom Spawn',style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                CustomCardPopular(m_image: 'https://secureservercdn.net/50.62.174.113/p7w.5c4.myftpupload.com/wp-content/uploads/revslider/herbal/coonfresh-gallery-slide-1.png',
-                                  m_price1: 'Rs 50/100g',
-                                ),
-                                Text('Mushroom Spawn',style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                CustomCardPopular(m_image: 'https://secureservercdn.net/50.62.174.113/p7w.5c4.myftpupload.com/wp-content/uploads/revslider/herbal/coonfresh-gallery-slide-1.png',
-                                  m_price1: 'Rs 40/100g',
-                                ),
-                                Text('Mushroom Spawn',style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),),
-                              ],
-                            ),
-                          ]
-                      ),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                            children: [
+                              ...products.map<Widget>((product) =>
+                                  CardPopular(product: product,))
+                            ]
+                        )
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top:20.0, bottom: 20.0),
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                       child: Text('Categories', style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -208,7 +183,7 @@ class _MushState extends State<Mush> {
                           child: CustomCardCategories(
                             color1: Colors.green.shade50,
                             text1: 'Mushroom',),
-                          onTap: (){
+                          onTap: () {
                             print('Mushroom');
                             Navigator.pushNamed(context, CategoryPage.id);
                           },),
@@ -216,7 +191,7 @@ class _MushState extends State<Mush> {
                           child: CustomCardCategories(
                             color1: Colors.pink.shade50,
                             text1: 'Spawn',),
-                          onTap: (){
+                          onTap: () {
                             print('spawn');
                             print('Mushroom');
                             Navigator.pushNamed(context, CategoryPage.id);
@@ -225,7 +200,7 @@ class _MushState extends State<Mush> {
                           child: CustomCardCategories(
                             color1: Colors.orange.shade50,
                             text1: 'Bags',),
-                          onTap: (){
+                          onTap: () {
                             print('Bags');
                             print('Mushroom');
                             Navigator.pushNamed(context, CategoryPage.id);
@@ -233,7 +208,7 @@ class _MushState extends State<Mush> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top:25.0, bottom: 20.0),
+                      padding: const EdgeInsets.only(top: 25.0, bottom: 20.0),
                       child: Text('Recommended for you', style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -244,9 +219,11 @@ class _MushState extends State<Mush> {
                 ),
               ),
               SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
                 ),
-                delegate: SliverChildBuilderDelegate((BuildContext context,int index){
+                delegate: SliverChildBuilderDelegate((BuildContext context,
+                    int index) {
                   return GridCardRecommend();
                 }, childCount: 10,
                 ),
@@ -254,6 +231,35 @@ class _MushState extends State<Mush> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CardPopular extends StatelessWidget {
+  final Product product;
+
+  const CardPopular({
+    this.product,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: product,
+      child: Column(
+        children: <Widget>[
+          CustomCardPopular(
+            m_image: product.image_url,
+            m_price1: 'Rs ${product.price}/120g',
+            onTap: () => context.read<Cart>().addProduct(product: product),
+          ),
+          Text(product.item_name, style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),),
+        ],
       ),
     );
   }

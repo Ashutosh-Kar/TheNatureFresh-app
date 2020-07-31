@@ -14,6 +14,7 @@ class Product extends ChangeNotifier {
   @JsonKey(defaultValue: 0)
   final qty_available;
 
+  @JsonKey(defaultValue: 0)
   int qty_purchased;
 
   // ignore: non_constant_identifier_names

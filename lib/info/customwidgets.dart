@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mushroomm/models/cart.dart';
+import 'package:provider/provider.dart';
 
 class CustomCardPopular extends StatelessWidget {
-  CustomCardPopular({@required this.m_image,@required this.m_price1});
+  CustomCardPopular(
+      {@required this.m_image, @required this.m_price1, @required this.onTap});
+
   final String m_image;
   final String m_price1;
+  final Function onTap;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,11 +45,13 @@ class CustomCardPopular extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(m_price1,
-                          style: TextStyle(
-                            fontSize: 8,
-                          ),),
-                      CustomGreenButton(),
+                      Text(
+                        m_price1,
+                        style: TextStyle(
+                          fontSize: 8,
+                        ),
+                      ),
+                      CustomGreenButton(onTap: onTap),
                     ],
                   ),
                 ),
@@ -134,7 +142,7 @@ class _GridCardRecommendState extends State<GridCardRecommend> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('Rs 40/120g'),
-                      CustomGreenButton(),
+                      CustomGreenButton(onTap: () {},),
                     ],
                   ),
                 ),
@@ -148,12 +156,15 @@ class _GridCardRecommendState extends State<GridCardRecommend> {
 }
 
 class CustomGreenButton extends StatelessWidget {
+  final Function onTap;
+
+  CustomGreenButton({@required this.onTap});
+
   @override
   Widget build(BuildContext context) {
+    var cart = Provider.of<Cart>(context);
     return GestureDetector(
-      onTap: (){
-        //TODO: increase item count in cart
-      },
+      onTap: this.onTap,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.green,
