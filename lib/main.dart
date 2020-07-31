@@ -7,6 +7,7 @@ import 'package:mushroomm/models/product.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
 import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:provider/provider.dart';
+import 'pages/cartpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           Mush.id: (context)=>Mush(),
           CategoryPage.id: (context)=>CategoryPage(),
           PaymentPage.id:  (context)=>PaymentPage(),
+          CartPage.id: (context)=>CartPage(),
         },
       ),
     );
@@ -82,10 +84,8 @@ class _MushState extends State<Mush> {
                 IconButton(
                   icon: Icon(Icons.shopping_basket, size: 28,),
                   onPressed: () {
-                    Navigator.pushNamed(context, PaymentPage.id); //for time being
-                    //TODO:This will navigate to Cart page once it's made.
+                    Navigator.pushNamed(context, CartPage.id);
                   },
-
                 ),
                 Positioned(
                     top: 3,

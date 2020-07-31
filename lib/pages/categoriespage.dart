@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mushroomm/info/datamodel.dart';
 import 'package:flutter/material.dart';
+import 'package:mushroomm/pages/cartpage.dart';
 import 'paymentpage.dart';
-
+import 'package:mushroomm/info/customwidgets.dart';
 class CategoryPage extends StatefulWidget {
   static String id='category_mushroom';
   @override
@@ -89,8 +90,7 @@ class _CategoryPageState extends State<CategoryPage> {
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
               onTap: (){
-                Navigator.pushNamed(context, PaymentPage.id); //for time being
-                //TODO:This will navigate to Cart page once it's made.
+                Navigator.pushNamed(context, CartPage.id);
               },
                 child: Icon(Icons.shopping_basket,color: Colors.black,)),
           ),
@@ -170,6 +170,7 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 }
 
+
 class VarietyImageCard extends StatelessWidget {
   VarietyImageCard({@required this.imgg});
   final String imgg;
@@ -199,75 +200,3 @@ class VarietyImageCard extends StatelessWidget {
   }
 }
 
-class AddItemIconBar extends StatefulWidget {
-  @override
-  _AddItemIconBarState createState() => _AddItemIconBarState();
-}
-
-class _AddItemIconBarState extends State<AddItemIconBar> {
-  int itemcount=0;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 30,
-      width: 80,
-      child: Row(
-        children: <Widget>[
-          GestureDetector(
-            onTap: (){
-              setState(() {
-                if(itemcount>0)
-                  itemcount--;
-                else
-                  itemcount=0;
-              });
-            },
-            onLongPress: (){
-              setState(() {
-                itemcount=0;
-              });
-            },
-            child: Container(
-              height: 24,
-              width: 24,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top:8.0),
-                child: Icon(Icons.maximize,color: Colors.white,size: 20,),
-              ),
-            ),
-          ),
-          Container(
-            height: 24,
-            width: 24,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Center(child: Text(itemcount.toString())),
-            ),),
-          GestureDetector(
-            onTap: (){
-              setState(() {
-                itemcount++;
-              });
-            },
-            child: Container(
-              height: 24,
-              width: 24,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Icon(Icons.add,color: Colors.white,),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

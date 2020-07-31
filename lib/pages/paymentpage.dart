@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mushroomm/pages/cartpage.dart';
 
 int orderno=9909;
 
@@ -41,7 +42,11 @@ class _PaymentPageState extends State<PaymentPage> {
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                           ) ,),
-                          Icon(Icons.shopping_basket),
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.pushNamed(context, CartPage.id);
+                            },
+                              child: Icon(Icons.shopping_basket)),
                         ],
                       ),
                     ),
