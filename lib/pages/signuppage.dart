@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/pages/firstpage.dart';
+import 'package:mushroomm/pages/detailpage.dart';
 import 'package:provider/provider.dart';
 
 class SignupPage extends StatefulWidget {
@@ -116,7 +117,7 @@ class _SignupPageState extends State<SignupPage> {
                       print('clik');
                       if (await _userRepository.signUp(
                           email: email, password: password)) {
-                        Navigator.pushNamed(context, Mush.id);
+                        Navigator.pushNamed(context, DetailPage.id);
                       }
                       else {
                         _scaffoldState.currentState.showSnackBar(SnackBar(
