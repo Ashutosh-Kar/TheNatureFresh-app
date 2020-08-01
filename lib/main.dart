@@ -6,6 +6,7 @@ import 'package:mushroomm/pages/categoriespage.dart';
 import 'package:mushroomm/pages/loginpage.dart';
 import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:mushroomm/pages/signuppage.dart';
+import 'package:mushroomm/pages/detailpage.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/cartpage.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         routes: {
           LoginPage.id: (context)=>LoginPage(),
           SignupPage.id:(context)=>SignupPage(),
+          DetailPage.id:(context)=>DetailPage(),
           Mush.id: (context)=>Mush(),
           CategoryPage.id: (context)=>CategoryPage(),
           PaymentPage.id:  (context)=>PaymentPage(),
