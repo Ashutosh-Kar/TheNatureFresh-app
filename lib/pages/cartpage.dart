@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mushroomm/info/customwidgets.dart';
+import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
 import 'package:mushroomm/pages/paymentpage.dart';
@@ -38,10 +39,18 @@ class _CartPageState extends State<CartPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Deliver to Roshan Kumar', style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),),
+                          Text(
+                            'Deliver to ' +
+                                    context
+                                        .watch<UserRepository>()
+                                        .firebaseuser
+                                        .email ??
+                                '',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           SizedBox(height:8),
                           Text('A-13 Noida, Delhi-114672', style: TextStyle(
                             color: Colors.white,
@@ -182,6 +191,13 @@ class DeliveryCard extends StatefulWidget {
 class _DeliveryCardState extends State<DeliveryCard> {
   @override
   Widget build(BuildContext context) {
+    double total = 0;
+    Cart cart = Provider.of<Cart>(context);
+    cart.products.forEach((element) {
+      total += element.price * element.qty_purchased;
+    });
+    print(total);
+
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
@@ -237,7 +253,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
                     fontSize: 25,
                     fontWeight: FontWeight.w600,
                   ),),
-                  Text('Rs 80',style: TextStyle(
+                  Text('$total', style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                   )),

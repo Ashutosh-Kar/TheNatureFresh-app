@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:mushroomm/info/customwidgets.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
+import 'package:mushroomm/pages/cartpage.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
 import 'package:provider/provider.dart';
-import 'package:mushroomm/pages/cartpage.dart';
 
 class Mush extends StatefulWidget {
   static String id = 'first_page';
@@ -40,6 +40,7 @@ class _MushState extends State<Mush> {
   @override
   Widget build(BuildContext context) {
     print('build method called');
+    //The line of code that you think you can delete but you can't
     itemCount = context.watch<Cart>().itemCount;
     return Scaffold(
       appBar: AppBar(

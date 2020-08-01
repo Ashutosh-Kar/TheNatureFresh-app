@@ -1,31 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:mushroomm/pages/loginpage.dart';
+import 'package:mushroomm/models/UserRepository.dart';
+import 'package:mushroomm/pages/firstpage.dart';
+import 'package:provider/provider.dart';
 
 class SignupPage extends StatefulWidget {
-  static String id= 'signup_page';
+  static String id = 'signup_page';
+
   @override
   _SignupPageState createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final _scaffoldState = GlobalKey<ScaffoldState>();
 
   String email;
   String password;
 
   @override
   Widget build(BuildContext context) {
+    var _userRepository = Provider.of<UserRepository>(context);
+
     return Scaffold(
+      key: _scaffoldState,
       backgroundColor: Colors.grey.shade300,
-      body: SafeArea(child:
-      Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage('https://img.freepik.com/free-photo/fresh-champignon-mushrooms-macro-shoot-close-up-white-sliced-champignon_174533-853.jpg?size=626&ext=jpg'),
+      body: SafeArea(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                  'https://img.freepik.com/free-photo/fresh-champignon-mushrooms-macro-shoot-close-up-white-sliced-champignon_174533-853.jpg?size=626&ext=jpg'),
+            ),
           ),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -104,11 +112,18 @@ class _SignupPageState extends State<SignupPage> {
                     ),),
                   RaisedButton(
                     color: Colors.green,
-                    onPressed: (){
-                      //TODO
-                      Navigator.pushNamed(context, LoginPage.id );
+                    onPressed: () async {
+                      print('clik');
+                      if (await _userRepository.signUp(
+                          email: email, password: password)) {
+                        Navigator.pushNamed(context, Mush.id);
+                      }
+                      else {
+                        _scaffoldState.currentState.showSnackBar(SnackBar(
+                          content: Text("Invalid Email or Password format"),));
+                      }
                     },
-                    child: Text('SIGN UP',style: TextStyle(
+                    child: Text('SIGN UP', style: TextStyle(
                         color: Colors.white
                     )),
                   ),

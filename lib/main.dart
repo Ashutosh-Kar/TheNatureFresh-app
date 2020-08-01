@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
-import 'package:mushroomm/pages/paymentpage.dart';
-import 'package:provider/provider.dart';
 import 'package:mushroomm/pages/loginpage.dart';
+import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:mushroomm/pages/signuppage.dart';
-import 'pages/firstpage.dart';
+import 'package:provider/provider.dart';
 
 import 'pages/cartpage.dart';
+import 'pages/firstpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Cart>(
           create: (_) => Cart(),
         ),
+        ChangeNotifierProvider<UserRepository>(
+          create: (_) => UserRepository.instance(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

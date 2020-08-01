@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mushroomm/models/product.dart';
@@ -16,7 +18,11 @@ class Cart extends ChangeNotifier {
   void addProduct({Product product}) {
     int index = products.indexWhere((element) => element.id == product.id);
     if (index != -1) {
-      products[index].add();
+      if (products[index].qty_available > products[index].qty_purchased) {
+        products[index].add();
+      } else {
+        return;
+      }
     } else {
       products.add(product);
     }
@@ -24,6 +30,8 @@ class Cart extends ChangeNotifier {
     notifyListeners();
     print(products);
     print('itemCount in Class');
+    print('Cart state');
+    print(jsonEncode(this));
     print(itemCount);
   }
 
@@ -35,6 +43,7 @@ class Cart extends ChangeNotifier {
       } else {
         products.removeAt(index);
       }
+      --num_items;
       notifyListeners();
     }
   }

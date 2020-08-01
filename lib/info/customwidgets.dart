@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mushroomm/models/cart.dart';
+import 'package:mushroomm/models/product.dart';
 import 'package:provider/provider.dart';
 
 class CustomCardPopular extends StatelessWidget {
@@ -190,27 +191,18 @@ class AddItemIconBar extends StatefulWidget {
 }
 
 class _AddItemIconBarState extends State<AddItemIconBar> {
-  int itemcount=0;
   @override
   Widget build(BuildContext context) {
+    var cart = Provider.of<Cart>(context);
+    var product = Provider.of<Product>(context);
     return Container(
       height: 30,
       width: 80,
       child: Row(
         children: <Widget>[
           GestureDetector(
-            onTap: (){
-              setState(() {
-                if(itemcount>0)
-                  itemcount--;
-                else
-                  itemcount=0;
-              });
-            },
-            onLongPress: (){
-              setState(() {
-                itemcount=0;
-              });
+            onTap: () {
+              cart.removeProduct(product: product);
             },
             child: Container(
               height: 24,
@@ -233,13 +225,11 @@ class _AddItemIconBarState extends State<AddItemIconBar> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: Center(child: Text(itemcount.toString())),
+              child: Center(child: Text(product.qty_purchased.toString())),
             ),),
           GestureDetector(
             onTap: (){
-              setState(() {
-                itemcount++;
-              });
+              cart.addProduct(product: product);
             },
             child: Container(
               height: 24,
