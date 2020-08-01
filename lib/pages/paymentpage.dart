@@ -181,5 +181,4 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 }
 
-//https://images.vexels.com/media/users/3/194361/isolated/preview/56685e66a4bb34c0bec02166e87313b2-gift-box-with-balloons-by-vexels.png
 
