@@ -4,6 +4,7 @@ import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
 import 'package:mushroomm/pages/loginpage.dart';
+import 'package:mushroomm/pages/loginwrapper.dart';
 import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:mushroomm/pages/signuppage.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'pages/cartpage.dart';
 import 'pages/firstpage.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
@@ -33,14 +34,15 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: LoginPage.id,
+        initialRoute: LoginWrapper.id,
         routes: {
-          LoginPage.id: (context)=>LoginPage(),
-          SignupPage.id:(context)=>SignupPage(),
-          Mush.id: (context)=>Mush(),
-          CategoryPage.id: (context)=>CategoryPage(),
-          PaymentPage.id:  (context)=>PaymentPage(),
-          CartPage.id: (context)=>CartPage(),
+          LoginWrapper.id: (context) => LoginWrapper(),
+          LoginPage.id: (context) => LoginPage(),
+          SignupPage.id: (context) => SignupPage(),
+          Mush.id: (context) => Mush(),
+          CategoryPage.id: (context) => CategoryPage(),
+          PaymentPage.id: (context) => PaymentPage(),
+          CartPage.id: (context) => CartPage(),
         },
       ),
     );

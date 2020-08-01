@@ -9,9 +9,9 @@ part 'cart.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Cart extends ChangeNotifier {
   List<Product> products;
-  int num_items = 0;
+  int itemCount = 0;
 
-  int get itemCount => num_items;
+  int get countItem => itemCount;
 
   Cart() : products = List<Product>();
 
@@ -26,13 +26,13 @@ class Cart extends ChangeNotifier {
     } else {
       products.add(product);
     }
-    num_items = num_items + 1;
+    itemCount = itemCount + 1;
     notifyListeners();
     print(products);
     print('itemCount in Class');
     print('Cart state');
     print(jsonEncode(this));
-    print(itemCount);
+    print(countItem);
   }
 
   void removeProduct({Product product}) {
@@ -43,7 +43,7 @@ class Cart extends ChangeNotifier {
       } else {
         products.removeAt(index);
       }
-      --num_items;
+      --itemCount;
       notifyListeners();
     }
   }

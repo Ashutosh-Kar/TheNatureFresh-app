@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mushroomm/info/customwidgets.dart';
+import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
 import 'package:mushroomm/pages/cartpage.dart';
@@ -41,7 +42,7 @@ class _MushState extends State<Mush> {
   Widget build(BuildContext context) {
     print('build method called');
     //The line of code that you think you can delete but you can't
-    itemCount = context.watch<Cart>().itemCount;
+    itemCount = context.watch<Cart>().countItem;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade300,
@@ -60,7 +61,7 @@ class _MushState extends State<Mush> {
               ),
             ),
             onTap: () {
-              //TODO: navigate to location page
+              context.read<UserRepository>().signOut();
             },),
           Container(child: Padding(
             padding: const EdgeInsets.all(8.0),

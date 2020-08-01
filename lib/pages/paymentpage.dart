@@ -1,20 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mushroomm/models/UserRepository.dart';
+import 'package:mushroomm/models/cart.dart';
+import 'package:mushroomm/models/order.dart';
 import 'package:mushroomm/pages/cartpage.dart';
+import 'package:provider/provider.dart';
 
-int orderno=9909;
+int orderno = 9909;
 
 class PaymentPage extends StatefulWidget {
-  static String id='payment_page';
+  static String id = 'payment_page';
+
   @override
   _PaymentPageState createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  final _scaffoldState = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    Cart _cart = Provider.of<Cart>(context);
     return Scaffold(
+      key: _scaffoldState,
       body: Container(
         height: size.height,
         color: Colors.grey.shade300,
@@ -34,18 +43,18 @@ class _PaymentPageState extends State<PaymentPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           GestureDetector(
-                            onTap:(){
-                              Navigator.pop(context);
-                            },
+                              onTap:(){
+                                Navigator.pop(context);
+                              },
                               child: Icon(Icons.arrow_back_ios)),
                           Text('Payment Method',style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                           ) ,),
                           GestureDetector(
-                            onTap: (){
-                              Navigator.pushNamed(context, CartPage.id);
-                            },
+                              onTap: (){
+                                Navigator.pushNamed(context, CartPage.id);
+                              },
                               child: Icon(Icons.shopping_basket)),
                         ],
                       ),
@@ -98,22 +107,52 @@ class _PaymentPageState extends State<PaymentPage> {
                         Container(
                           height: 55,
                           width: 110,
-                          child: Image.network('https://img.pngio.com/money-png-nowskills-it-apprenticeships-moneypng-430_385.png'),
+                          child: Image.network(
+                              'https://img.pngio.com/money-png-nowskills-it-apprenticeships-moneypng-430_385.png'),
                         ),
                         Text('Cash on Delivery'),
-                        FlatButton(onPressed: (){}, child: Icon(Icons.check_circle,color: Colors.lightGreen,)),
+                        FlatButton(onPressed: () {},
+                            child: Icon(Icons.check_circle, color: Colors
+                                .lightGreen,)),
                       ],),
                   ],
                 ),
               ),
             ),
             GestureDetector(
-              onTap: (){
-                confirmDialog(context);
+              onTap: () async {
+                Order _order = Order(
+                    address: context
+                        .read<UserRepository>()
+                        .user
+                        .address
+                        .toString(),
+                    cart: _cart,
+                    delivery_charge: 50,
+                    gst: 20,
+                    sgst: 10,
+                    cgst: 10,
+                    orderid: "123",
+                    phone_number: "9668998757",
+                    total: 800.0,
+                    user_id: context
+                        .read<UserRepository>()
+                        .firebaseuser
+                        .uid
+                );
+                if (await _order.uploadOrder()) {
+                  Navigator.pop(context);
+                  confirmDialog(context);
+                }
+                else {
+                  _scaffoldState.currentState.showSnackBar(SnackBar(
+                    content: Text(
+                        "Sorry! There was an error placing your order, please try again later"),));
+                }
               },
               child: Container(
                 color: Colors.green.shade600,
-                margin: EdgeInsets.only(top:10),
+                margin: EdgeInsets.only(top: 10),
                 width: double.infinity,
                 height: 60,
                 child: Center(child: Text('Confirm', style:
@@ -129,6 +168,7 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
     );
   }
+
   void confirmDialog(BuildContext context){
     var alert= AlertDialog(
       shape: RoundedRectangleBorder(
@@ -173,8 +213,7 @@ class _PaymentPageState extends State<PaymentPage> {
           )),
     );
     showDialog(context: context,
-        builder: (BuildContext context)
-        {
+        builder: (BuildContext context) {
           return alert;
         }
     );
