@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/pages/firstpage.dart';
 import 'package:mushroomm/pages/loginpage.dart';
@@ -19,7 +20,13 @@ class LoginWrapper extends StatelessWidget {
           case Status.Authenticating:
             return LoginPage();
           case Status.Authenticated:
-            return Mush();
+            {
+              var box = Hive.box('mushroom');
+              user.fetchUserFromFirebase();
+              bool initStatus = box.get('initStatus', defaultValue: false);
+              print(initStatus);
+              return Mush();
+            }
           default:
             return Text('lol');
         }

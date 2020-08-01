@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/order.dart';
+import 'package:mushroomm/models/orderdetails.dart';
 import 'package:mushroomm/pages/cartpage.dart';
 import 'package:provider/provider.dart';
 
@@ -121,25 +122,23 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
             GestureDetector(
               onTap: () async {
+                var orderDetails =
+                    Provider.of<OrderDetails>(context, listen: false);
                 Order _order = Order(
-                    address: context
-                        .read<UserRepository>()
-                        .user
-                        .address
-                        .toString(),
+                    address:
+                        context.read<UserRepository>().user.address.toString(),
                     cart: _cart,
-                    delivery_charge: 50,
-                    gst: 20,
-                    sgst: 10,
-                    cgst: 10,
-                    orderid: "123",
-                    phone_number: "9668998757",
-                    total: 800.0,
-                    user_id: context
+                    delivery_charge: orderDetails.delivery_charges,
+                    gst: orderDetails.gst,
+                    sgst: orderDetails.sgst,
+                    cgst: orderDetails.cgst,
+                    phone_number: context
                         .read<UserRepository>()
                         .firebaseuser
-                        .uid
-                );
+                        .phoneNumber
+                        .toString(),
+                    total: orderDetails.total,
+                    user_id: context.read<UserRepository>().firebaseuser.uid);
                 if (await _order.uploadOrder()) {
                   Navigator.pop(context);
                   confirmDialog(context);

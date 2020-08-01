@@ -15,8 +15,7 @@ Cart _$CartFromJson(Map<String, dynamic> json) {
     ..itemCount = json['itemCount'] as int;
 }
 
-Map<String, dynamic> _$CartToJson(Cart instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$CartToJson(Cart instance) => <String, dynamic>{
       'products': instance.products?.map((e) => e?.toJson())?.toList(),
       'itemCount': instance.itemCount,
     };

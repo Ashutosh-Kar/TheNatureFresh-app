@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
 import 'package:mushroomm/models/user.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
@@ -40,8 +41,10 @@ class UserRepository extends ChangeNotifier {
       notifyListeners();
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      Hive.box('mushroom').put('initStatus', true);
       return true;
     } catch (e) {
+      print(e);
       _status = Status.Unauthenticated;
       notifyListeners();
       return false;

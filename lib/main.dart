@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
+import 'package:mushroomm/models/orderdetails.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
 import 'package:mushroomm/pages/loginpage.dart';
 import 'package:mushroomm/pages/loginwrapper.dart';
@@ -13,6 +16,8 @@ import 'pages/cartpage.dart';
 import 'pages/firstpage.dart';
 
 void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('mushroom');
   runApp(MyApp());
 }
 
@@ -26,6 +31,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserRepository>(
           create: (_) => UserRepository.instance(),
+        ),
+        InheritedProvider<OrderDetails>(
+          create: (_) =>
+              OrderDetails(packing_charges: 50.0, delivery_charges: 50.0),
         )
       ],
       child: MaterialApp(

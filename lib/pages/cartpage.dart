@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mushroomm/info/customwidgets.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
+import 'package:mushroomm/models/orderdetails.dart';
 import 'package:mushroomm/models/product.dart';
 import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:provider/provider.dart';
@@ -191,11 +192,19 @@ class DeliveryCard extends StatefulWidget {
 class _DeliveryCardState extends State<DeliveryCard> {
   @override
   Widget build(BuildContext context) {
-    double total = 0;
+    OrderDetails _orderDetails = Provider.of<OrderDetails>(context);
+    double total = _orderDetails.packing_charges +
+        _orderDetails.delivery_charges;
     Cart cart = Provider.of<Cart>(context);
     cart.products.forEach((element) {
       total += element.price * element.qty_purchased;
     });
+    _orderDetails
+      ..total = total
+      ..sgst = 0.035 * total
+      ..cgst = 0.035 * total
+      ..gst = 0.07 * total;
+
     print(total);
 
     return Padding(
@@ -220,7 +229,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('Delivery Charges'),
-                  Text('Rs 20'),
+                  Text('Rs ${_orderDetails.delivery_charges}'),
                 ],
               ),
             ),
@@ -230,7 +239,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('Packing Charges'),
-                  Text('Rs 20'),
+                  Text("Rs ${_orderDetails.packing_charges}"),
                 ],
               ),
             ),
@@ -240,7 +249,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('GST'),
-                  Text('Rs 20'),
+                  Text('Rs ${_orderDetails.gst.toStringAsFixed(2)}'),
                 ],
               ),
             ),

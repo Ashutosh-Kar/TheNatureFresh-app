@@ -17,12 +17,12 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     gst: (json['gst'] as num)?.toDouble() ?? 0.0,
     id: json['id'] as String,
     orderStatus: json['orderStatus'] as String ?? 'Confirmed',
-    order_date: json['order_date'] as String,
+    order_date: json['order_date'] as Map<String, dynamic>,
     phone_number: json['phone_number'] as String,
     sgst: (json['sgst'] as num)?.toDouble() ?? 0.0,
     total: (json['total'] as num)?.toDouble() ?? 0.0,
     user_id: json['user_id'] as String,
-    orderid: json['orderid'] as String,
+    orderid: json['orderid'] as int,
   )..order_day = json['order_day'] as String;
 }
 

@@ -27,7 +27,7 @@ class Order {
   @JsonKey(defaultValue: "Confirmed")
   String orderStatus;
 
-  String order_date;
+  Map<String, dynamic> order_date;
 
   String order_day;
 
@@ -38,7 +38,7 @@ class Order {
 
   String user_id;
 
-  String orderid;
+  int orderid;
 
   Order(
       {this.address,
@@ -56,14 +56,27 @@ class Order {
       this.orderid});
 
   Future<bool> uploadOrder() async {
-    print(jsonEncode(this));
     try {
-      var ref = Firestore.instance.collection('orders').document();
+      var ref = await Firestore.instance.collection('orders').document().get();
       this
         ..id = ref.documentID
         ..orderStatus = "Confirmed"
-        ..order_date = DateTime.now().toIso8601String();
-      await ref.setData(this.toJson());
+        ..order_date = {
+          "_nanoseconds": Timestamp.now().nanoseconds.toString(),
+          "_seconds": Timestamp.now().seconds.toString()
+        };
+      var documentref =
+          Firestore.instance.collection('references').document('orders');
+      var document = await documentref.get();
+      int orderId = await document.data['orderId'];
+      print('Order Id ${orderId}');
+      this.orderid = orderId;
+      print(jsonEncode(this));
+      await Firestore.instance
+          .collection('orders')
+          .document(this.id)
+          .setData(this.toJson());
+      await documentref.updateData({'orderId': FieldValue.increment(1)});
       return true;
     } catch (e) {
       print(e);
