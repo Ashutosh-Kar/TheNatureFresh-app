@@ -1,4 +1,4 @@
-# mushroomm
+# The Nature Fresh - App
 
 A new Flutter application.
 
