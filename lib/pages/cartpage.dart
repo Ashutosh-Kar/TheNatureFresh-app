@@ -17,18 +17,18 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  Widget userDetails(){
+  Widget userDetails() {
     return Container(
-      height: 100,
+      // height: 100,
       child: Padding(
-        padding: const EdgeInsets.only(bottom:10.0),
+        padding: const EdgeInsets.only(bottom: 10.0),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.only(left:15.0,right: 15.0),
+            padding: EdgeInsets.only(left: 15.0, right: 15.0),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.green,
+                borderRadius: BorderRadius.circular(20),
+                color: Color.fromRGBO(136, 172, 104, 1),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -41,7 +41,7 @@ class _CartPageState extends State<CartPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Deliver to ' +
+                            'Deliver to\n' +
                                     context
                                         .watch<UserRepository>()
                                         .firebaseuser
@@ -52,22 +52,25 @@ class _CartPageState extends State<CartPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height:8),
-                          Text('A-13 Noida, Delhi-114672', style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),),
+                          SizedBox(height: 8),
+                          Text(
+                            'A-13 Noida, Delhi-114672',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     GestureDetector(
-                      onTap: (){
-
-                      },
-                      child: Text('Change',style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      )),
+                      onTap: () {},
+                      child: Text('Change',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16
+                          )),
                     ),
                   ],
                 ),
@@ -81,15 +84,14 @@ class _CartPageState extends State<CartPage> {
 
   Widget createTable({List<Product> products}) {
     List<TableRow> rows = [];
-    products.forEach((product) =>
-    {
-      rows.add(TableRow(children: [
-        CartItems(
-          product: product,
-          onTap: () => {},
-        ),
-      ]))
-    });
+    products.forEach((product) => {
+          rows.add(TableRow(children: [
+            CartItems(
+              product: product,
+              onTap: () => {},
+            ),
+          ]))
+        });
 
     return Table(children: rows);
   }
@@ -98,42 +100,61 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     Cart cart = Provider.of<Cart>(context);
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
-      body:
-      SingleChildScrollView(
-        physics: ScrollPhysics(),
-        child: Container(
-          color: Colors.grey.shade300,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top:35.0,left: 10,right: 14,bottom:20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      child: Icon(Icons.arrow_back_ios),
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Text('Cart',style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),),
-                    GestureDetector(
-                      child: Icon(Icons.shopping_basket),
-                      onTap: () {
-                        Navigator.pushNamed(context, PaymentPage.id);
-                      },),
-                  ],
-                ),
-              ),
-              userDetails(),
-              createTable(products: cart.products),
-              DeliveryCard(),
-            ],
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: GestureDetector(
+          child: Icon(Icons.arrow_back_ios),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        centerTitle: true,
+        title: Text(
+          'Cart',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
           ),
+        ),
+        // actions: <Widget>[
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 22.0),
+        //     child: GestureDetector(
+        //       child: Icon(Icons.shopping_basket),
+        //       onTap: () {
+        //         Navigator.pushNamed(context, PaymentPage.id);
+        //       },
+        //     ),
+        //   ),
+        // ],
+      ),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        physics: ScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            userDetails(),
+            createTable(products: cart.products),
+            DeliveryCard(),
+            MaterialButton(
+              height: 45,
+              child: Text('Checkout',style: TextStyle(fontSize: 22,color: Colors.white),),
+              minWidth: 300,
+              color: Color.fromRGBO(136, 172, 104, 1),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              onPressed: () {
+                Navigator.pushNamed(context, PaymentPage.id);
+              },
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
         ),
       ),
     );
@@ -153,35 +174,24 @@ class CartItems extends StatelessWidget {
       value: product,
       child: Padding(
         padding: const EdgeInsets.only(
-            top: 20.0, bottom: 20.0, left: 15, right: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                VarietyImageCard(imgg: product.image_url),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(product.item_name, style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    )),
-                    AddItemIconBar(),
-                  ],
-                ),
-              ],
-            ),
-            Text('Rs ${product.price}'),
-            //Original price to be calculated and produced here
-          ],
+          top: 20.0,
+          bottom: 20.0,
+        ),
+        child: ListTile(
+          leading: VarietyImageCard(imgg: product.image_url),
+          title: Text(product.item_name,
+              overflow: TextOverflow.fade,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              )),
+          subtitle: AddItemIconBar(),
+          trailing: Text('Rs ${product.price}'),
         ),
       ),
     );
   }
 }
-
 
 //Layout for CartPage Payment details (total payment details to be passed here)
 class DeliveryCard extends StatefulWidget {
@@ -208,10 +218,11 @@ class _DeliveryCardState extends State<DeliveryCard> {
     print(total);
 
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -258,14 +269,18 @@ class _DeliveryCardState extends State<DeliveryCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Total',style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                  ),),
-                  Text('$total', style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  )),
+                  Text(
+                    'Total',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text('$total',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      )),
                 ],
               ),
             ),
@@ -275,4 +290,3 @@ class _DeliveryCardState extends State<DeliveryCard> {
     );
   }
 }
-

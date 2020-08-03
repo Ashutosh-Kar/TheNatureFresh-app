@@ -176,26 +176,16 @@ class VarietyImageCard extends StatelessWidget {
   final String imgg;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Container(
-        height: 70,
-        width: 110,
-        child: Container(
-          height: 100,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(imgg),
-              )
-          ),
+    return Container(
+      height: 100,
+      width: 90,
+       decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: NetworkImage(imgg),
+            )
         ),
-      ),
     );
   }
 }

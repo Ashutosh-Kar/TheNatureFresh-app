@@ -5,8 +5,10 @@ import 'package:mushroomm/info/customwidgets.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
+import 'package:mushroomm/pages/Editinfo.dart';
 import 'package:mushroomm/pages/cartpage.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
+import 'package:mushroomm/pages/orderhsitory.dart';
 import 'package:provider/provider.dart';
 
 class Mush extends StatefulWidget {
@@ -19,6 +21,7 @@ class Mush extends StatefulWidget {
 class _MushState extends State<Mush> {
   List<Product> products;
   int itemCount;
+  bool load = true;
 
   Future<void> getProducts() async {
     var snapshots =
@@ -27,14 +30,16 @@ class _MushState extends State<Mush> {
       snapshots.documents.forEach((element) {
         products.add(Product.fromJson(element.data));
       });
+      load = false;
     });
   }
+
+  final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     products = List<Product>();
     getProducts();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -44,13 +49,17 @@ class _MushState extends State<Mush> {
     //The line of code that you think you can delete but you can't
     itemCount = context.watch<Cart>().countItem;
     return Scaffold(
+      key: key,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Icon(
-          Icons.clear_all,
-          size: 28,
+        leading: GestureDetector(
+          child: Icon(
+            Icons.clear_all,
+            size: 28,
+          ),
+          onTap: () => key.currentState.openDrawer(),
         ),
         actions: <Widget>[
           GestureDetector(
@@ -98,39 +107,102 @@ class _MushState extends State<Mush> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Container(
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search, color: Colors.grey.shade500),
-                    filled: true,
-                    fillColor: Colors.grey.shade300,
-                    hintText: 'Search fresh mushrooms, seeds & more',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(style: BorderStyle.none),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+      drawer: Drawer(
+        elevation: 0,
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Column(
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(
+                        'https://www.pinclipart.com/picdir/middle/5-59262_mushrooms-clipart-animated-1-congratulations-clipart-mushroom-cartoon.png'),
                   ),
-                  onChanged: (value) {
-                    print('Text Input');
-                  },
+                ],
+              ),
+            ),
+            Text(
+              'Name',
+              style: TextStyle(fontSize: 22),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10,),
+            Text(
+              'Email',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20,),
+            ListTile(
+              leading: Icon(Icons.list),
+              title: Text('Order History'),
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => OrderHistory())),
+            ),
+            ListTile(
+              leading: Icon(Icons.edit),
+              title: Text('Edit User Info'),
+              onTap: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => EditInfo())),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search, color: Colors.grey.shade500),
+                  filled: true,
+                  fillColor: Colors.grey.shade300,
+                  hintText: 'Search fresh mushrooms, seeds & more',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(style: BorderStyle.none),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                onChanged: (value) {
+                  print('Text Input');
+                },
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              alignment: Alignment.topLeft,
+              child: Text(
+                'Our Items',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
                 ),
               ),
-              SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                            children: [
-                              ...products.map<Widget>((product) =>
-                                  CardPopular(product: product,))
-                            ]
-                        )
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 20),
+              child: load
+                  ? CircularProgressIndicator()
+                  : GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 8),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: products.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CardPopular(product: products[index]);
+                      },
                     ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -255,11 +327,15 @@ class CardPopular extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: product,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           CustomCardPopular(
-            m_image: product.image_url,
-            m_price1: 'Rs ${product.price}/120g',
+            mimage: product.image_url,
+            mprice1: 'Rs ${product.price}/120g',
             onTap: () => context.read<Cart>().addProduct(product: product),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Text(
             product.item_name,
