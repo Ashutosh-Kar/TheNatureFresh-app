@@ -22,7 +22,7 @@ class _MushState extends State<Mush> {
 
   Future<void> getProducts() async {
     var snapshots =
-    await Firestore.instance.collection('products').getDocuments();
+        await Firestore.instance.collection('products').getDocuments();
     setState(() {
       snapshots.documents.forEach((element) {
         products.add(Product.fromJson(element.data));
@@ -44,8 +44,9 @@ class _MushState extends State<Mush> {
     //The line of code that you think you can delete but you can't
     itemCount = context.watch<Cart>().countItem;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: Icon(
           Icons.clear_all,
@@ -62,141 +63,72 @@ class _MushState extends State<Mush> {
             ),
             onTap: () {
               context.read<UserRepository>().signOut();
-            },),
-          Container(child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.shopping_basket, size: 28,),
-                  onPressed: () {
-                    Navigator.pushNamed(context, CartPage.id);
-                  },
-                ),
-                Positioned(
-                    top: 3,
-                    right: 5,
-                    child: Container(
-                        height: 18,
-                        width: 18,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle
-                        ),
-                        child: Center(child:
-                        Text(itemCount.toString() ?? '0',
-                          style: TextStyle(
-                              color: Colors.white
-                          ),)))
-                )
-              ],
+            },
+          ),
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.shopping_basket,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, CartPage.id);
+                    },
+                  ),
+                  Positioned(
+                      top: 3,
+                      right: 5,
+                      child: Container(
+                          height: 18,
+                          width: 18,
+                          decoration: BoxDecoration(
+                              color: Colors.red, shape: BoxShape.circle),
+                          child: Center(
+                              child: Text(
+                            itemCount.toString() ?? '0',
+                            style: TextStyle(color: Colors.white),
+                          ))))
+                ],
+              ),
             ),
-          ),),
+          ),
         ],
       ),
-      body:
-      Container(
-        color: Colors.grey.shade300,
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                            Icons.search, color: Colors.grey.shade500),
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Search fresh mushrooms, seeds & more',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              style: BorderStyle.none),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        print('Text Input');
-                      },),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                      child: Text('Popular Searches', style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),
-                      ),
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Container(
+                child: TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search, color: Colors.grey.shade500),
+                    filled: true,
+                    fillColor: Colors.grey.shade300,
+                    hintText: 'Search fresh mushrooms, seeds & more',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(style: BorderStyle.none),
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
+                  ),
+                  onChanged: (value) {
+                    print('Text Input');
+                  },
+                ),
+              ),
+              SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
                             children: [
                               ...products.map<Widget>((product) =>
                                   CardPopular(product: product,))
                             ]
                         )
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                      child: Text('Categories', style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        GestureDetector(
-                          child: CustomCardCategories(
-                            color1: Colors.green.shade50,
-                            text1: 'Mushroom',),
-                          onTap: () {
-                            print('Mushroom');
-                            Navigator.pushNamed(context, CategoryPage.id);
-                          },),
-                        GestureDetector(
-                          child: CustomCardCategories(
-                            color1: Colors.pink.shade50,
-                            text1: 'Spawn',),
-                          onTap: () {
-                            print('spawn');
-                            print('Mushroom');
-                            Navigator.pushNamed(context, CategoryPage.id);
-                          },),
-                        GestureDetector(
-                          child: CustomCardCategories(
-                            color1: Colors.orange.shade50,
-                            text1: 'Bags',),
-                          onTap: () {
-                            print('Bags');
-                            print('Mushroom');
-                            Navigator.pushNamed(context, CategoryPage.id);
-                          },),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25.0, bottom: 20.0),
-                      child: Text('Recommended for you', style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                delegate: SliverChildBuilderDelegate((BuildContext context,
-                    int index) {
-                  return GridCardRecommend();
-                }, childCount: 10,
-                ),
-              ),
             ],
           ),
         ),
@@ -204,6 +136,111 @@ class _MushState extends State<Mush> {
     );
   }
 }
+// Container(
+//         child: Padding(
+//           padding: const EdgeInsets.all(10.0),
+//           child: CustomScrollView(
+//             slivers: <Widget>[
+//               SliverList(
+//                 delegate: SliverChildListDelegate(
+//                   [
+//                     TextField(
+//                       decoration: InputDecoration(
+//                         prefixIcon: Icon(
+//                             Icons.search, color: Colors.grey.shade500),
+//                         filled: true,
+//                         fillColor: Colors.grey.shade300,
+//                         hintText: 'Search fresh mushrooms, seeds & more',
+//                         enabledBorder: OutlineInputBorder(
+//                           borderSide: BorderSide(
+//                               style: BorderStyle.none),
+//                           borderRadius: BorderRadius.circular(15),
+//                         ),
+//                       ),
+//                       onChanged: (value) {
+//                         print('Text Input');
+//                       },),
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+//                       child: Text('Popular Searches', style: TextStyle(
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 30,
+//                       ),
+//                       ),
+//                     ),
+//                     SingleChildScrollView(
+//                         scrollDirection: Axis.horizontal,
+//                         child: Row(
+//                             children: [
+//                               ...products.map<Widget>((product) =>
+//                                   CardPopular(product: product,))
+//                             ]
+//                         )
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+//                       child: Text('Categories', style: TextStyle(
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 30,
+//                       ),
+//                       ),
+//                     ),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: <Widget>[
+//                         GestureDetector(
+//                           child: CustomCardCategories(
+//                             color1: Colors.green.shade50,
+//                             text1: 'Mushroom',),
+//                           onTap: () {
+//                             print('Mushroom');
+//                             Navigator.pushNamed(context, CategoryPage.id);
+//                           },),
+//                         GestureDetector(
+//                           child: CustomCardCategories(
+//                             color1: Colors.pink.shade50,
+//                             text1: 'Spawn',),
+//                           onTap: () {
+//                             print('spawn');
+//                             print('Mushroom');
+//                             Navigator.pushNamed(context, CategoryPage.id);
+//                           },),
+//                         GestureDetector(
+//                           child: CustomCardCategories(
+//                             color1: Colors.orange.shade50,
+//                             text1: 'Bags',),
+//                           onTap: () {
+//                             print('Bags');
+//                             print('Mushroom');
+//                             Navigator.pushNamed(context, CategoryPage.id);
+//                           },),
+//                       ],
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 25.0, bottom: 20.0),
+//                       child: Text('Recommended for you', style: TextStyle(
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 30,
+//                       ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               SliverGrid(
+//                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                   crossAxisCount: 2,
+//                 ),
+//                 delegate: SliverChildBuilderDelegate((BuildContext context,
+//                     int index) {
+//                   return GridCardRecommend();
+//                 }, childCount: 10,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
 
 class CardPopular extends StatelessWidget {
   final Product product;
@@ -224,13 +261,15 @@ class CardPopular extends StatelessWidget {
             m_price1: 'Rs ${product.price}/120g',
             onTap: () => context.read<Cart>().addProduct(product: product),
           ),
-          Text(product.item_name, style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),),
+          Text(
+            product.item_name,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );
   }
 }
-
