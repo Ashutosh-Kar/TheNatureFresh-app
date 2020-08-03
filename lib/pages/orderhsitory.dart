@@ -1,4 +1,10 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mushroomm/models/UserRepository.dart';
+import 'package:mushroomm/models/order.dart';
+import 'package:provider/provider.dart';
 
 class OrderHistory extends StatefulWidget {
   @override
@@ -8,6 +14,7 @@ class OrderHistory extends StatefulWidget {
 class _OrderHistoryState extends State<OrderHistory> {
   @override
   Widget build(BuildContext context) {
+    var _user = Provider.of<UserRepository>(context);
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
@@ -25,19 +32,44 @@ class _OrderHistoryState extends State<OrderHistory> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            reverse: true,
-            scrollDirection: Axis.vertical,
-            itemCount: 10,
-            itemBuilder: (context, index) => OrderCard(id: index),
-          ),
+          child: StreamBuilder(
+              stream: Firestore.instance
+                  .collection('orders')
+                  .where('user_id', isEqualTo: _user.firebaseuser.uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Order> orders = List<Order>();
+                  snapshot.data.documents.forEach((DocumentSnapshot item) {
+                    orders.add(Order.fromJson(item.data));
+                  });
+
+                  print(jsonEncode(orders));
+                  return ListView.builder(
+                    reverse: false,
+                    scrollDirection: Axis.vertical,
+                    itemCount: orders.length,
+                    itemBuilder: (context, index) =>
+                        OrderCard(order: orders[orders.length - index - 1]),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
         ));
   }
 }
 
 class OrderCard extends StatelessWidget {
-  OrderCard({this.id});
-  final id;
+  OrderCard({this.order});
+
+  final Order order;
+
+  String items;
+
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -52,7 +84,7 @@ class OrderCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  'Order Id: $id',
+                  'Order Id: ${order.orderid}',
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(height: 8),
@@ -60,17 +92,19 @@ class OrderCard extends StatelessWidget {
                   'ITEMS',
                   style: TextStyle(fontSize: 17),
                 ),
-                Text(
-                  '1 x abcd, 2 x efgh',
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
-                ),                
+                ...order.cart.products.map<Text>((product) =>
+                    Text(
+                      '${product.qty_purchased} x ${product.item_name}',
+                      style: TextStyle(
+                          fontSize: 14, color: Colors.grey.shade400),
+                    ),),
                 SizedBox(height: 4),
                 Text(
                   'ORDERED ON',
                   style: TextStyle(fontSize: 17),
                 ),
                 Text(
-                  'Timesptamp',
+                  order.order_day,
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
                 )
               ],
@@ -103,11 +137,11 @@ class OrderCard extends StatelessWidget {
                   style: TextStyle(fontSize: 16, color: Colors.grey.shade400),
                 ),
                 Text(
-                  'Deliverd ',
+                  '${order.orderStatus} ',
                   style: TextStyle(fontSize: 16),
                 ),
                 Text(
-                  'RS 100',
+                  order.total.toString(),
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
               ],
