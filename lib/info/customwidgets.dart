@@ -6,60 +6,52 @@ import 'package:provider/provider.dart';
 
 class CustomCardPopular extends StatelessWidget {
   CustomCardPopular(
-      {@required this.m_image, @required this.m_price1, @required this.onTap});
+      {@required this.mimage, @required this.mprice1, @required this.onTap});
 
-  final String m_image;
-  final String m_price1;
+  final String mimage;
+  final String mprice1;
   final Function onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        elevation: 5,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Container(
-          height: 180,
-          width: 110,
-          child:Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Card(
+      elevation: 5,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            height: 90,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(18),topRight: Radius.circular(18)),
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(mimage),//TODO: Place original image
+                )
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical:5,horizontal: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  height: 100,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(m_image),//TODO: Place original image
-                      )
+                Text(
+                  mprice1,
+                  style: TextStyle(
+                    fontSize: 12,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        m_price1,
-                        style: TextStyle(
-                          fontSize: 8,
-                        ),
-                      ),
-                      CustomGreenButton(onTap: onTap),
-                    ],
-                  ),
-                ),
+                CustomGreenButton(onTap: onTap),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
