@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart' as validator;
+
 var a;
-var b,c,d,e,f,g,h;// tem
+var b, c, d, e, f, g, h; // initalize using controleler or these data
+
 class EditInfo extends StatefulWidget {
   @override
   _EditInfoState createState() => _EditInfoState();
@@ -39,7 +41,7 @@ class _EditInfoState extends State<EditInfo> {
           ),
         ],
       ),
-      body:  Padding(
+      body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Form(
           key: _formKey,
@@ -47,30 +49,37 @@ class _EditInfoState extends State<EditInfo> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 20),
-              CustomTextField(iconfield: Icons.perm_identity, hinttext: 'First Name',
+              CustomTextField(
+                iconfield: Icons.perm_identity,
+                hinttext: 'First Name',
                 validator: (String value) {
                   if (value.isEmpty) {
                     return 'Enter your first name';
                   }
                   return null;
                 },
-                onsaved: (value){
-                  b=value; //Save firstname
+                onsaved: (value) {
+                  b = value; //Save firstname
                 },
               ),
-              CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Middle Name',
-                onsaved: (value){
-                  c=value;
+              CustomTextField(
+                iconfield: Icons.perm_identity,
+                hinttext: 'Middle Name',
+                onsaved: (value) {
+                  c = value;
                 },
                 validator: (String value) {
                   if (value.isEmpty) {
                     return null;
                   }
                   return null;
-                },),
-              CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Last Name',
-                  onsaved: (value){
-                    d=value;
+                },
+              ),
+              CustomTextField(
+                  iconfield: Icons.perm_identity,
+                  hinttext: 'Last Name',
+                  onsaved: (value) {
+                    d = value;
                     //store value
                   },
                   validator: (String value) {
@@ -79,9 +88,11 @@ class _EditInfoState extends State<EditInfo> {
                     }
                     return null;
                   }),
-              CustomTextField(iconfield: Icons.home, hinttext: 'Full Address',
-                  onsaved: (value){
-                    e=value;
+              CustomTextField(
+                  iconfield: Icons.home,
+                  hinttext: 'Full Address',
+                  onsaved: (value) {
+                    e = value;
                   },
                   validator: (String value) {
                     if (value.isEmpty) {
@@ -91,36 +102,41 @@ class _EditInfoState extends State<EditInfo> {
                   }),
               Row(
                 children: <Widget>[
-                  Expanded(child: CustomTextField(
-                      iconfield: Icons.account_balance, hinttext: 'Landmark',
-                      onsaved: (value){
-                        f=value;
-                      },
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Enter landmark';
-                        }
-                        return null;
-                      })),
+                  Expanded(
+                      child: CustomTextField(
+                          iconfield: Icons.account_balance,
+                          hinttext: 'Landmark',
+                          onsaved: (value) {
+                            f = value;
+                          },
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return 'Enter landmark';
+                            }
+                            return null;
+                          })),
                   SizedBox(width: 10),
-                  Expanded(child: CustomTextField(
-                      iconfield: Icons.location_on,
-                      hinttext: 'Pincode',
-                      onsaved: (value){
-                        g=value;
-                      },
-                      validator: (String value) {
-                        if (value.isEmpty || !validator.isNumeric(value)) {
-                          return 'Enter proper pin code';
-                        }
-                        return null;
-                      }),
+                  Expanded(
+                    child: CustomTextField(
+                        iconfield: Icons.location_on,
+                        hinttext: 'Pincode',
+                        onsaved: (value) {
+                          g = value;
+                        },
+                        validator: (String value) {
+                          if (value.isEmpty || !validator.isNumeric(value)) {
+                            return 'Enter proper pin code';
+                          }
+                          return null;
+                        }),
                   ),
                 ],
               ),
-              CustomTextField(iconfield: Icons.phone, hinttext: 'Mobile Number',
-                  onsaved: (value){
-                    h=value;
+              CustomTextField(
+                  iconfield: Icons.phone,
+                  hinttext: 'Mobile Number',
+                  onsaved: (value) {
+                    h = value;
                   },
                   validator: (String value) {
                     if (value.isEmpty || !validator.isNumeric(value)) {
@@ -132,21 +148,20 @@ class _EditInfoState extends State<EditInfo> {
                 padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
                 child: MaterialButton(
                   minWidth: 250,
-                  padding: EdgeInsets.symmetric(horizontal:15, vertical:12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
                   color: Color.fromRGBO(136, 172, 104, 1),
-                  onPressed: (){
-                    if (_formKey.currentState.validate()){
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                     print("do backedn to update data");
+                      print("do backedn to update data");
                       //OR, can navigate to login page and ask for login
                       // credentials and then allow user to enter.
                     }
                   },
-                  child: Text('Update',style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22
-                  )),
+                  child: Text('Update',
+                      style: TextStyle(color: Colors.white, fontSize: 22)),
                 ),
               ),
             ],
@@ -157,10 +172,12 @@ class _EditInfoState extends State<EditInfo> {
   }
 }
 
-
 class CustomTextField extends StatefulWidget {
-  CustomTextField({@required this.iconfield, @required this.hinttext,
-    @required this.onsaved, @required this.validator});
+  CustomTextField(
+      {@required this.iconfield,
+      @required this.hinttext,
+      @required this.onsaved,
+      @required this.validator});
   final IconData iconfield;
   final String hinttext;
   final Function onsaved;
@@ -178,14 +195,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
         validator: widget.validator,
         onSaved: widget.onsaved,
         decoration: InputDecoration(
-          prefixIcon: Icon(widget.iconfield,
-            color: Colors.grey.shade500, size: 30,),
+          prefixIcon: Icon(
+            widget.iconfield,
+            color: Colors.grey.shade500,
+            size: 30,
+          ),
           filled: true,
           fillColor: Colors.grey.shade200,
           hintText: widget.hinttext,
-          focusedBorder:OutlineInputBorder(
-            borderSide: BorderSide(
-                style: BorderStyle.solid),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(style: BorderStyle.solid),
             borderRadius: BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
@@ -200,4 +219,3 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 }
-

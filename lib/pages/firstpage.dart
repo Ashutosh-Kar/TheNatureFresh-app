@@ -120,21 +120,33 @@ class _MushState extends State<Mush> {
                     backgroundImage: NetworkImage(
                         'https://www.pinclipart.com/picdir/middle/5-59262_mushrooms-clipart-animated-1-congratulations-clipart-mushroom-cartoon.png'),
                   ),
-                  Text('Name'),
-                  Text('Email'),                  
                 ],
               ),
             ),
+            Text(
+              'Name',
+              style: TextStyle(fontSize: 22),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10,),
+            Text(
+              'Email',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20,),
             ListTile(
-                    leading: Icon(Icons.list),
-                    title: Text('Order History'),
-                    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OrderHistory())),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text('Edit User Info'),
-                     onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditInfo())),
-                  ),
+              leading: Icon(Icons.list),
+              title: Text('Order History'),
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => OrderHistory())),
+            ),
+            ListTile(
+              leading: Icon(Icons.edit),
+              title: Text('Edit User Info'),
+              onTap: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => EditInfo())),
+            ),
           ],
         ),
       ),
