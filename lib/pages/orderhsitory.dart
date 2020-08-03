@@ -78,30 +78,36 @@ class OrderCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  'Order Id: ${order.orderid}',
-                  style: TextStyle(fontSize: 20),
+                  'Order ID: ${order.orderid}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 8),
                 Text(
                   'ITEMS',
                   style: TextStyle(fontSize: 17),
                 ),
-                ...order.cart.products.map<Text>((product) =>
-                    Text(
-                      '${product.qty_purchased} x ${product.item_name}',
-                      style: TextStyle(
-                          fontSize: 14, color: Colors.grey.shade400),
-                    ),),
-                SizedBox(height: 4),
+                SizedBox(
+                  height: 4,
+                ),
+                ...order.cart.products.map<Text>(
+                  (product) => Text(
+                    '${product.qty_purchased} x ${product.item_name}',
+                    style: TextStyle(fontSize: 14, color: Colors.black54),
+                  ),
+                ),
+                SizedBox(height: 7),
                 Text(
                   'ORDERED ON',
                   style: TextStyle(fontSize: 17),
+                ),
+                SizedBox(
+                  height: 4,
                 ),
                 Text(
                   order.order_day,
