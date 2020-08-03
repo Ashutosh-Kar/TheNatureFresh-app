@@ -61,12 +61,40 @@ class UserRepository extends ChangeNotifier {
           .createUserWithEmailAndPassword(email: email, password: password);
       _user = authResult.user;
       _status = Status.Authenticated;
-      notifyListeners();
       return true;
     } catch (e) {
       print(e);
       _status = Status.Unauthenticated;
       notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> setDetails(
+      {String firstName,
+      String lastName,
+      String address,
+      String landmark,
+      String pincode,
+      String phoneNumber}) async {
+    try {
+      var storageRef = Firestore.instance.collection('users').document();
+      var refNum = storageRef.documentID;
+      String properAddress = "$address, landmark:$landmark, pincode:$pincode";
+      await storageRef.setData({
+        "address": properAddress,
+        "role": "user",
+        "phone_number": "+91$phoneNumber",
+        "uid": _user.uid
+      });
+      UserUpdateInfo _userUpdateInfo = UserUpdateInfo();
+      _userUpdateInfo.displayName = "$firstName $lastName";
+      await _user.updateProfile(_userUpdateInfo);
+      var box = await Hive.openBox('mushroom');
+      box.put('initStatus', true);
+      return true;
+    } catch (e) {
+      print(e);
       return false;
     }
   }

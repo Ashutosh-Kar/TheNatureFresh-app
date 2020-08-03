@@ -134,8 +134,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     cgst: orderDetails.cgst,
                     phone_number: context
                         .read<UserRepository>()
-                        .firebaseuser
-                        .phoneNumber
+                        .user
+                        .phone_number
                         .toString(),
                     total: orderDetails.total,
                     user_id: context.read<UserRepository>().firebaseuser.uid);
