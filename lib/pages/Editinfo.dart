@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart' as validator;
+import 'package:outline_material_icons/outline_material_icons.dart';
 
 var a;
 var b, c, d, e, f, g, h; // initalize using controleler or these data
@@ -25,21 +26,7 @@ class _EditInfoState extends State<EditInfo> {
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text('Edit Info'),
-        centerTitle: true,
-        actions: <Widget>[
-          GestureDetector(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.save,
-                size: 28,
-              ),
-            ),
-            onTap: () {
-              print("save edit");
-            },
-          ),
-        ],
+        centerTitle: true,        
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -89,7 +76,7 @@ class _EditInfoState extends State<EditInfo> {
                     return null;
                   }),
               CustomTextField(
-                  iconfield: Icons.home,
+                  iconfield: OMIcons.home,
                   hinttext: 'Full Address',
                   onsaved: (value) {
                     e = value;
@@ -104,7 +91,7 @@ class _EditInfoState extends State<EditInfo> {
                 children: <Widget>[
                   Expanded(
                       child: CustomTextField(
-                          iconfield: Icons.account_balance,
+                          iconfield: OMIcons.landscape,
                           hinttext: 'Landmark',
                           onsaved: (value) {
                             f = value;
@@ -118,7 +105,7 @@ class _EditInfoState extends State<EditInfo> {
                   SizedBox(width: 10),
                   Expanded(
                     child: CustomTextField(
-                        iconfield: Icons.location_on,
+                        iconfield: OMIcons.locationOn,
                         hinttext: 'Pincode',
                         onsaved: (value) {
                           g = value;
@@ -133,7 +120,7 @@ class _EditInfoState extends State<EditInfo> {
                 ],
               ),
               CustomTextField(
-                  iconfield: Icons.phone,
+                  iconfield: OMIcons.phone,
                   hinttext: 'Mobile Number',
                   onsaved: (value) {
                     h = value;
@@ -197,11 +184,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
           prefixIcon: Icon(
             widget.iconfield,
-            color: Colors.grey.shade500,
+            color: Colors.black,
             size: 30,
           ),
           filled: true,
-          fillColor: Colors.grey.shade200,
+          fillColor: Colors.white,
           hintText: widget.hinttext,
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(style: BorderStyle.solid),
