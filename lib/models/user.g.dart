@@ -11,11 +11,14 @@ User _$UserFromJson(Map<String, dynamic> json) {
     address: json['address'] as String,
     role: json['role'] as String,
     uid: json['uid'] as String,
+    phone_number: json['phone_number'] as String,
   );
 }
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+Map<String, dynamic> _$UserToJson(User instance) =>
+    <String, dynamic>{
       'address': instance.address,
       'role': instance.role,
       'uid': instance.uid,
+      'phone_number': instance.phone_number,
     };

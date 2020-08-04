@@ -134,8 +134,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     cgst: orderDetails.cgst,
                     phone_number: context
                         .read<UserRepository>()
-                        .firebaseuser
-                        .phoneNumber
+                        .user
+                        .phone_number
                         .toString(),
                     total: orderDetails.total,
                     user_id: context.read<UserRepository>().firebaseuser.uid);
@@ -194,9 +194,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: NetworkImage('https://images.vexels.com/media/users/3/194361/isolated/preview/56685e66a4bb34c0bec02166e87313b2-gift-box-with-balloons-by-vexels.png')
-                    )
-                ),
+                        image: NetworkImage(
+                            'https://images.vexels.com/media/users/3/194361/isolated/preview/56685e66a4bb34c0bec02166e87313b2-gift-box-with-balloons-by-vexels.png'))),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -204,10 +203,10 @@ class _PaymentPageState extends State<PaymentPage> {
                   Text('Order successfully placed!'),
                 ],
               ),
-              Text('ORDER #$orderno',style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),),
+//              Text('ORDER #$orderno',style: TextStyle(
+//                fontWeight: FontWeight.bold,
+//                fontSize: 20,
+//              ),),
             ],
           )),
     );

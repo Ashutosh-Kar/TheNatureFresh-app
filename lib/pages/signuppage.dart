@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mushroomm/models/UserRepository.dart';
-import 'package:mushroomm/pages/firstpage.dart';
 import 'package:mushroomm/pages/detailpage.dart';
 import 'package:provider/provider.dart';
 

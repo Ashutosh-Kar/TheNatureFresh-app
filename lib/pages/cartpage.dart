@@ -210,10 +210,10 @@ class _DeliveryCardState extends State<DeliveryCard> {
       total += element.price * element.qty_purchased;
     });
     _orderDetails
-      ..total = total
-      ..sgst = 0.035 * total
-      ..cgst = 0.035 * total
-      ..gst = 0.07 * total;
+      ..total = num.parse(total.toStringAsFixed(2))
+      ..sgst = num.parse((0.035 * total).toStringAsFixed(3))
+      ..cgst = num.parse((0.035 * total).toStringAsFixed(3))
+      ..gst = num.parse((0.07 * total).toStringAsFixed(3));
 
     print(total);
 

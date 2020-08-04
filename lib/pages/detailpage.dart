@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/pages/firstpage.dart';
-import 'package:mushroomm/pages/loginpage.dart';
 import 'package:mushroomm/pages/signuppage.dart';
+import 'package:provider/provider.dart';
 import 'package:validators/validators.dart' as validator;
 
 var a;
@@ -14,16 +15,30 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String firstName;
+  String lastName;
+  String address;
+  String landmark;
+  String pincode;
+  String phoneNumber;
+
   @override
   Widget build(BuildContext context) {
+    var _user = Provider.of<UserRepository>(context);
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey.shade300,
         leading: GestureDetector(
-          child: Icon(Icons.arrow_back_ios,size:30,color: Colors.black,),
-          onTap: (){
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: 30,
+            color: Colors.black,
+          ),
+          onTap: () {
             Navigator.pushNamed(context, SignupPage.id);
           },
         ),
@@ -49,7 +64,7 @@ class _DetailPageState extends State<DetailPage> {
                     return null;
                   },
                   onsaved: (value){
-                    b=value; //Save firstname
+                    firstName = value;
                   },
                 ),
                 CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Middle Name',
@@ -64,7 +79,7 @@ class _DetailPageState extends State<DetailPage> {
                   },),
                 CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Last Name',
                     onsaved: (value){
-                      d=value;
+                      lastName = value;
                       //store value
                     },
                     validator: (String value) {
@@ -75,7 +90,7 @@ class _DetailPageState extends State<DetailPage> {
                     }),
                 CustomTextField(iconfield: Icons.home, hinttext: 'Full Address',
                     onsaved: (value){
-                      e=value;
+                      address = value;
                     },
                     validator: (String value) {
                       if (value.isEmpty) {
@@ -88,7 +103,7 @@ class _DetailPageState extends State<DetailPage> {
                     Expanded(child: CustomTextField(
                         iconfield: Icons.account_balance, hinttext: 'Landmark',
                         onsaved: (value){
-                          f=value;
+                          landmark = value;
                         },
                         validator: (String value) {
                           if (value.isEmpty) {
@@ -101,7 +116,7 @@ class _DetailPageState extends State<DetailPage> {
                         iconfield: Icons.location_on,
                         hinttext: 'Pincode',
                         onsaved: (value){
-                          g=value;
+                          pincode = value;
                         },
                         validator: (String value) {
                           if (value.isEmpty || !validator.isNumeric(value)) {
@@ -114,7 +129,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 CustomTextField(iconfield: Icons.phone, hinttext: 'Mobile Number',
                     onsaved: (value){
-                      h=value;
+                      phoneNumber = value;
                     },
                     validator: (String value) {
                       if (value.isEmpty || !validator.isNumeric(value)) {
@@ -126,10 +141,26 @@ class _DetailPageState extends State<DetailPage> {
                   padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
                   child: RaisedButton(
                     color: Colors.green,
-                    onPressed: (){
-                      if (_formKey.currentState.validate()){
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                       Navigator.pushNamed(context, Mush.id);
+                        bool response = await _user.setDetails(
+                            firstName: firstName,
+                            lastName: lastName,
+                            address: address,
+                            landmark: landmark,
+                            pincode: pincode,
+                            phoneNumber: phoneNumber);
+                        if (response == true) {
+                          await _user.fetchUserFromFirebase();
+                          Navigator.pushNamed(context, Mush.id);
+                        }
+                        else {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text(
+                                "There was some error setting your details, please try again lager"),));
+                          await _user.firebaseuser.delete();
+                        }
                         //OR, can navigate to login page and ask for login
                         // credentials and then allow user to enter.
                       }
@@ -167,14 +198,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         validator: widget.validator,
-        onSaved: widget.onsaved,
+        onChanged: widget.onsaved,
         decoration: InputDecoration(
           prefixIcon: Icon(widget.iconfield,
             color: Colors.grey.shade500, size: 30,),
           filled: true,
           fillColor: Colors.grey.shade200,
           hintText: widget.hinttext,
-          focusedBorder:OutlineInputBorder(
+          focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
                 style: BorderStyle.solid),
             borderRadius: BorderRadius.circular(10),

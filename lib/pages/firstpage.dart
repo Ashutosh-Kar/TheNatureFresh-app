@@ -7,7 +7,6 @@ import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
 import 'package:mushroomm/pages/Editinfo.dart';
 import 'package:mushroomm/pages/cartpage.dart';
-import 'package:mushroomm/pages/categoriespage.dart';
 import 'package:mushroomm/pages/orderhsitory.dart';
 import 'package:provider/provider.dart';
 
@@ -124,13 +123,16 @@ class _MushState extends State<Mush> {
               ),
             ),
             Text(
-              'Name',
+              context.watch<UserRepository>().firebaseuser.displayName,
               style: TextStyle(fontSize: 22),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10,),
             Text(
-              'Email',
+              context
+                  .watch<UserRepository>()
+                  .firebaseuser
+                  .email ?? '',
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
