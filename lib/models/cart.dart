@@ -24,7 +24,12 @@ class Cart extends ChangeNotifier {
         return;
       }
     } else {
-      products.add(product);
+      if (products[index].qty_available > products[index].qty_purchased) {
+        products[index].add();
+      }
+      else{
+        return;
+      }
     }
     itemCount = itemCount + 1;
     notifyListeners();

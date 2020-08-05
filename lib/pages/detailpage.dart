@@ -5,10 +5,33 @@ import 'package:mushroomm/pages/signuppage.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart' as validator;
 
+InputDecoration getInputDecoration({IconData iconField, String hintText}) {
+  return InputDecoration(
+    prefixIcon: Icon(
+      iconField,
+      color: Colors.grey.shade500,
+      size: 30,
+    ),
+    filled: true,
+    fillColor: Colors.grey.shade200,
+    hintText: hintText,
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(style: BorderStyle.solid),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+          color: Colors.grey.shade400, width: 2, style: BorderStyle.solid),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+}
+
 var a;
-var b,c,d,e,f,g,h;// temporary
+var b, c, d, e, f, g, h; // temporary
+
 class DetailPage extends StatefulWidget {
-  static String id= 'detail_page';
+  static String id = 'detail_page';
   @override
   _DetailPageState createState() => _DetailPageState();
 }
@@ -39,14 +62,16 @@ class _DetailPageState extends State<DetailPage> {
             color: Colors.black,
           ),
           onTap: () {
-            Navigator.pushNamed(context, SignupPage.id);
+            Navigator.popAndPushNamed(context, SignupPage.id);
           },
         ),
-        title: Text('Enter Details',
+        title: Text(
+          'Enter Details',
           style: TextStyle(
             color: Colors.black,
             fontSize: 25,
-          ),),
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -58,6 +83,7 @@ class _DetailPageState extends State<DetailPage> {
                 children: <Widget>[
                   SizedBox(height: 20),
                   CustomTextField(iconfield: Icons.perm_identity, hinttext: 'First Name',
+
                     validator: (String value) {
                       if (value.isEmpty) {
                         return 'Enter your first name';
@@ -170,6 +196,7 @@ class _DetailPageState extends State<DetailPage> {
                           color: Colors.white
                       )),
                     ),
+
                   ),
                 ],
               ),
@@ -181,10 +208,12 @@ class _DetailPageState extends State<DetailPage> {
   }
 }
 
-
 class CustomTextField extends StatefulWidget {
-  CustomTextField({@required this.iconfield, @required this.hinttext,
-    @required this.onsaved, @required this.validator});
+  CustomTextField(
+      {@required this.iconfield,
+      @required this.hinttext,
+      @required this.onsaved,
+      @required this.validator});
   final IconData iconfield;
   final String hinttext;
   final Function onsaved;
@@ -202,14 +231,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
         validator: widget.validator,
         onChanged: widget.onsaved,
         decoration: InputDecoration(
-          prefixIcon: Icon(widget.iconfield,
-            color: Colors.grey.shade500, size: 30,),
+          prefixIcon: Icon(
+            widget.iconfield,
+            color: Colors.grey.shade500,
+            size: 30,
+          ),
           filled: true,
           fillColor: Colors.grey.shade200,
           hintText: widget.hinttext,
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                style: BorderStyle.solid),
+            borderSide: BorderSide(style: BorderStyle.solid),
             borderRadius: BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(

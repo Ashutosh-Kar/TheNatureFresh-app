@@ -125,11 +125,7 @@ class _MushState extends State<Mush> {
               ),
             ),
             Text(
-              context
-                  .watch<UserRepository>()
-                  .firebaseuser
-                  .displayName
-                  .toString(),
+              context.watch<UserRepository>().firebaseuser.displayName ?? '',
               style: TextStyle(fontSize: 22),
               textAlign: TextAlign.center,
             ),

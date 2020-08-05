@@ -141,6 +141,11 @@ class UserRepository extends ChangeNotifier {
     print(jsonEncode(user));
   }
 
+  Future<void> updateUser() async {
+    _user.reload();
+    _user = await FirebaseAuth.instance.currentUser();
+  }
+
 //This function updates the username / display name of the user
 //Username has to be passed as named argument
 //  Future<void> updateUserName({String username}) async {
