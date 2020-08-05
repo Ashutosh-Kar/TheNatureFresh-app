@@ -66,7 +66,7 @@ class Order {
           "_nanoseconds": Timestamp.now().nanoseconds.toString(),
           "_seconds": Timestamp.now().seconds.toString()
         }
-        ..order_day = DateFormat('E M d y').format(DateTime.now());
+        ..order_day = DateFormat('E M-d-y').format(DateTime.now());
       var documentref =
           Firestore.instance.collection('references').document('orders');
       var document = await documentref.get();

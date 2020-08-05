@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mushroomm/info/customwidgets.dart';
@@ -7,6 +8,8 @@ import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
 import 'package:mushroomm/pages/Editinfo.dart';
 import 'package:mushroomm/pages/cartpage.dart';
+import 'package:mushroomm/pages/loginpage.dart';
+import 'package:mushroomm/pages/onBoarding.dart';
 import 'package:mushroomm/pages/orderhsitory.dart';
 import 'package:provider/provider.dart';
 
@@ -116,27 +119,32 @@ class _MushState extends State<Mush> {
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(
-                        'https://www.pinclipart.com/picdir/middle/5-59262_mushrooms-clipart-animated-1-congratulations-clipart-mushroom-cartoon.png'),
+                    backgroundImage: AssetImage('images/logo1.png'),
                   ),
                 ],
               ),
             ),
             Text(
-              context.watch<UserRepository>().firebaseuser.displayName,
-              style: TextStyle(fontSize: 22),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10,),
-            Text(
               context
                   .watch<UserRepository>()
                   .firebaseuser
-                  .email ?? '',
+                  .displayName
+                  .toString(),
+              style: TextStyle(fontSize: 22),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              context.watch<UserRepository>().firebaseuser.email.toString() ??
+                  '',
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             ListTile(
               leading: Icon(Icons.list),
               title: Text('Order History'),
@@ -148,6 +156,24 @@ class _MushState extends State<Mush> {
               title: Text('Edit User Info'),
               onTap: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => EditInfo())),
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Logout'),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+            ),
+             ListTile(
+              leading: Icon(Icons.screen_share),
+              title: Text('Splash'),
+              onTap: () {
+               
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => OnBoarding()));
+              },
             ),
           ],
         ),
@@ -340,7 +366,7 @@ class CardPopular extends StatelessWidget {
             height: 10,
           ),
           Text(
-            product.item_name,
+            product.item_name.toString(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,

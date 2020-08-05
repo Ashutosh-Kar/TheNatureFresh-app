@@ -48,129 +48,131 @@ class _DetailPageState extends State<DetailPage> {
             fontSize: 25,
           ),),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 20),
-                CustomTextField(iconfield: Icons.perm_identity, hinttext: 'First Name',
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return 'Enter your first name';
-                    }
-                    return null;
-                  },
-                  onsaved: (value){
-                    firstName = value;
-                  },
-                ),
-                CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Middle Name',
-                  onsaved: (value){
-                    c=value;
-                  },
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return null;
-                    }
-                    return null;
-                  },),
-                CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Last Name',
-                    onsaved: (value){
-                      lastName = value;
-                      //store value
-                    },
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 20),
+                  CustomTextField(iconfield: Icons.perm_identity, hinttext: 'First Name',
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return 'Enter your last name';
+                        return 'Enter your first name';
                       }
                       return null;
-                    }),
-                CustomTextField(iconfield: Icons.home, hinttext: 'Full Address',
+                    },
                     onsaved: (value){
-                      address = value;
+                      firstName = value;
                     },
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Enter your full address';
-                      }
-                      return null;
-                    }),
-                Row(
-                  children: <Widget>[
-                    Expanded(child: CustomTextField(
-                        iconfield: Icons.account_balance, hinttext: 'Landmark',
-                        onsaved: (value){
-                          landmark = value;
-                        },
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Enter landmark';
-                          }
-                          return null;
-                        })),
-                    SizedBox(width: 10),
-                    Expanded(child: CustomTextField(
-                        iconfield: Icons.location_on,
-                        hinttext: 'Pincode',
-                        onsaved: (value){
-                          pincode = value;
-                        },
-                        validator: (String value) {
-                          if (value.isEmpty || !validator.isNumeric(value)) {
-                            return 'Enter proper pin code';
-                          }
-                          return null;
-                        }),
-                    ),
-                  ],
-                ),
-                CustomTextField(iconfield: Icons.phone, hinttext: 'Mobile Number',
-                    onsaved: (value){
-                      phoneNumber = value;
-                    },
-                    validator: (String value) {
-                      if (value.isEmpty || !validator.isNumeric(value)) {
-                        return 'Enter valid mobile number';
-                      }
-                      return null;
-                    }),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
-                  child: RaisedButton(
-                    color: Colors.green,
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
-                        bool response = await _user.setDetails(
-                            firstName: firstName,
-                            lastName: lastName,
-                            address: address,
-                            landmark: landmark,
-                            pincode: pincode,
-                            phoneNumber: phoneNumber);
-                        if (response == true) {
-                          await _user.fetchUserFromFirebase();
-                          Navigator.pushNamed(context, Mush.id);
-                        }
-                        else {
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text(
-                                "There was some error setting your details, please try again lager"),));
-                          await _user.firebaseuser.delete();
-                        }
-                        //OR, can navigate to login page and ask for login
-                        // credentials and then allow user to enter.
-                      }
-                    },
-                    child: Text('ADD DETAILS',style: TextStyle(
-                        color: Colors.white
-                    )),
                   ),
-                ),
-              ],
+                  CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Middle Name',
+                    onsaved: (value){
+                      c=value;
+                    },
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return null;
+                      }
+                      return null;
+                    },),
+                  CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Last Name',
+                      onsaved: (value){
+                        lastName = value;
+                        //store value
+                      },
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Enter your last name';
+                        }
+                        return null;
+                      }),
+                  CustomTextField(iconfield: Icons.home, hinttext: 'Full Address',
+                      onsaved: (value){
+                        address = value;
+                      },
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Enter your full address';
+                        }
+                        return null;
+                      }),
+                  Row(
+                    children: <Widget>[
+                      Expanded(child: CustomTextField(
+                          iconfield: Icons.account_balance, hinttext: 'Landmark',
+                          onsaved: (value){
+                            landmark = value;
+                          },
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return 'Enter landmark';
+                            }
+                            return null;
+                          })),
+                      SizedBox(width: 10),
+                      Expanded(child: CustomTextField(
+                          iconfield: Icons.location_on,
+                          hinttext: 'Pincode',
+                          onsaved: (value){
+                            pincode = value;
+                          },
+                          validator: (String value) {
+                            if (value.isEmpty || !validator.isNumeric(value)) {
+                              return 'Enter proper pin code';
+                            }
+                            return null;
+                          }),
+                      ),
+                    ],
+                  ),
+                  CustomTextField(iconfield: Icons.phone, hinttext: 'Mobile Number',
+                      onsaved: (value){
+                        phoneNumber = value;
+                      },
+                      validator: (String value) {
+                        if (value.isEmpty || !validator.isNumeric(value)) {
+                          return 'Enter valid mobile number';
+                        }
+                        return null;
+                      }),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
+                    child: RaisedButton(
+                      color: Colors.green,
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          bool response = await _user.setDetails(
+                              firstName: firstName,
+                              lastName: lastName,
+                              address: address,
+                              landmark: landmark,
+                              pincode: pincode,
+                              phoneNumber: phoneNumber);
+                          if (response == true) {
+                            await _user.fetchUserFromFirebase();
+                            Navigator.pushNamed(context, Mush.id);
+                          }
+                          else {
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  "There was some error setting your details, please try again lager"),));
+                            await _user.firebaseuser.delete();
+                          }
+                          //OR, can navigate to login page and ask for login
+                          // credentials and then allow user to enter.
+                        }
+                      },
+                      child: Text('ADD DETAILS',style: TextStyle(
+                          color: Colors.white
+                      )),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

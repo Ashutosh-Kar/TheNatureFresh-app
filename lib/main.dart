@@ -1,3 +1,4 @@
+import 'package:custom_splash/custom_splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -39,25 +40,32 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        home: CustomSplash(
+          imagePath: 'images/logo1.png',
+          home: LoginWrapper(),          
+          duration: 2500,
+          logoSize: 200,
+          backGroundColor: Colors.white,
+          type: CustomSplashType.StaticDuration,
+          animationEffect: 'zoom-in',
+        ),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: LoginWrapper.id,
+        // initialRoute: LoginWrapper.id,
         routes: {
           LoginWrapper.id: (context) => LoginWrapper(),
-          LoginPage.id: (context)=>LoginPage(),
-          SignupPage.id:(context)=>SignupPage(),
-          DetailPage.id:(context)=>DetailPage(),
-          Mush.id: (context)=>Mush(),
-          CategoryPage.id: (context)=>CategoryPage(),
-          PaymentPage.id:  (context)=>PaymentPage(),
-          CartPage.id: (context)=>CartPage(),
+          LoginPage.id: (context) => LoginPage(),
+          SignupPage.id: (context) => SignupPage(),
+          DetailPage.id: (context) => DetailPage(),
+          Mush.id: (context) => Mush(),
+          CategoryPage.id: (context) => CategoryPage(),
+          PaymentPage.id: (context) => PaymentPage(),
+          CartPage.id: (context) => CartPage(),
         },
       ),
     );
   }
 }
-
-
