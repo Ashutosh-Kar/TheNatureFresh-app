@@ -5,10 +5,33 @@ import 'package:mushroomm/pages/signuppage.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart' as validator;
 
+InputDecoration getInputDecoration({IconData iconField, String hintText}) {
+  return InputDecoration(
+    prefixIcon: Icon(
+      iconField,
+      color: Colors.grey.shade500,
+      size: 30,
+    ),
+    filled: true,
+    fillColor: Colors.grey.shade200,
+    hintText: hintText,
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(style: BorderStyle.solid),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+          color: Colors.grey.shade400, width: 2, style: BorderStyle.solid),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+}
+
 var a;
-var b,c,d,e,f,g,h;// temporary
+var b, c, d, e, f, g, h; // temporary
+
 class DetailPage extends StatefulWidget {
-  static String id= 'detail_page';
+  static String id = 'detail_page';
   @override
   _DetailPageState createState() => _DetailPageState();
 }
@@ -39,14 +62,16 @@ class _DetailPageState extends State<DetailPage> {
             color: Colors.black,
           ),
           onTap: () {
-            Navigator.pushNamed(context, SignupPage.id);
+            Navigator.popAndPushNamed(context, SignupPage.id);
           },
         ),
-        title: Text('Enter Details',
+        title: Text(
+          'Enter Details',
           style: TextStyle(
             color: Colors.black,
             fontSize: 25,
-          ),),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -56,29 +81,36 @@ class _DetailPageState extends State<DetailPage> {
             child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
-                CustomTextField(iconfield: Icons.perm_identity, hinttext: 'First Name',
+                CustomTextField(
+                  iconfield: Icons.perm_identity,
+                  hinttext: 'First Name',
                   validator: (String value) {
                     if (value.isEmpty) {
                       return 'Enter your first name';
                     }
                     return null;
                   },
-                  onsaved: (value){
+                  onsaved: (value) {
                     firstName = value;
                   },
                 ),
-                CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Middle Name',
-                  onsaved: (value){
-                    c=value;
+                CustomTextField(
+                  iconfield: Icons.perm_identity,
+                  hinttext: 'Middle Name',
+                  onsaved: (value) {
+                    c = value;
                   },
                   validator: (String value) {
                     if (value.isEmpty) {
                       return null;
                     }
                     return null;
-                  },),
-                CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Last Name',
-                    onsaved: (value){
+                  },
+                ),
+                CustomTextField(
+                    iconfield: Icons.perm_identity,
+                    hinttext: 'Last Name',
+                    onsaved: (value) {
                       lastName = value;
                       //store value
                     },
@@ -88,8 +120,10 @@ class _DetailPageState extends State<DetailPage> {
                       }
                       return null;
                     }),
-                CustomTextField(iconfield: Icons.home, hinttext: 'Full Address',
-                    onsaved: (value){
+                CustomTextField(
+                    iconfield: Icons.home,
+                    hinttext: 'Full Address',
+                    onsaved: (value) {
                       address = value;
                     },
                     validator: (String value) {
@@ -100,43 +134,50 @@ class _DetailPageState extends State<DetailPage> {
                     }),
                 Row(
                   children: <Widget>[
-                    Expanded(child: CustomTextField(
-                        iconfield: Icons.account_balance, hinttext: 'Landmark',
-                        onsaved: (value){
-                          landmark = value;
-                        },
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Enter landmark';
-                          }
-                          return null;
-                        })),
+                    Expanded(
+                        child: CustomTextField(
+                            iconfield: Icons.account_balance,
+                            hinttext: 'Landmark',
+                            onsaved: (value) {
+                              landmark = value;
+                            },
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Enter landmark';
+                              }
+                              return null;
+                            })),
                     SizedBox(width: 10),
-                    Expanded(child: CustomTextField(
-                        iconfield: Icons.location_on,
-                        hinttext: 'Pincode',
-                        onsaved: (value){
-                          pincode = value;
-                        },
-                        validator: (String value) {
-                          if (value.isEmpty || !validator.isNumeric(value)) {
-                            return 'Enter proper pin code';
-                          }
-                          return null;
-                        }),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomTextField(
+                            iconfield: Icons.location_on,
+                            hinttext: 'Pincode',
+                            onsaved: (value) {
+                              pincode = value;
+                            },
+                            validator: (String value) {
+                              if (value.isEmpty || !validator.isNumeric(value)) {
+                                return 'Enter proper pin code';
+                              }
+                              return null;
+                            }),
+                      ),
                     ),
                   ],
                 ),
-                CustomTextField(iconfield: Icons.phone, hinttext: 'Mobile Number',
-                    onsaved: (value){
-                      phoneNumber = value;
-                    },
-                    validator: (String value) {
-                      if (value.isEmpty || !validator.isNumeric(value)) {
-                        return 'Enter valid mobile number';
-                      }
-                      return null;
-                    }),
+                TextFormField(
+                  onChanged: (value) => phoneNumber = value,
+                  validator: (value) {
+                    if(value.isEmpty || !validator.isNumeric(value) || !validator.isLength(value, 10,10)){
+                      return 'Please enter valid mobile number';
+                    }
+                    return null;
+                  } ,
+                  decoration: getInputDecoration(iconField: Icons.phone,hintText:'Mobile Number'),
+                  keyboardType: TextInputType.phone,
+                ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
                   child: RaisedButton(
@@ -153,21 +194,21 @@ class _DetailPageState extends State<DetailPage> {
                             phoneNumber: phoneNumber);
                         if (response == true) {
                           await _user.fetchUserFromFirebase();
+                          _user.updateUser();
                           Navigator.pushNamed(context, Mush.id);
-                        }
-                        else {
+                        } else {
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
                             content: Text(
-                                "There was some error setting your details, please try again lager"),));
+                                "There was some error setting your details, please try again lager"),
+                          ));
                           await _user.firebaseuser.delete();
                         }
                         //OR, can navigate to login page and ask for login
                         // credentials and then allow user to enter.
                       }
                     },
-                    child: Text('ADD DETAILS',style: TextStyle(
-                        color: Colors.white
-                    )),
+                    child: Text('ADD DETAILS',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
@@ -179,10 +220,12 @@ class _DetailPageState extends State<DetailPage> {
   }
 }
 
-
 class CustomTextField extends StatefulWidget {
-  CustomTextField({@required this.iconfield, @required this.hinttext,
-    @required this.onsaved, @required this.validator});
+  CustomTextField(
+      {@required this.iconfield,
+      @required this.hinttext,
+      @required this.onsaved,
+      @required this.validator});
   final IconData iconfield;
   final String hinttext;
   final Function onsaved;
@@ -200,14 +243,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
         validator: widget.validator,
         onChanged: widget.onsaved,
         decoration: InputDecoration(
-          prefixIcon: Icon(widget.iconfield,
-            color: Colors.grey.shade500, size: 30,),
+          prefixIcon: Icon(
+            widget.iconfield,
+            color: Colors.grey.shade500,
+            size: 30,
+          ),
           filled: true,
           fillColor: Colors.grey.shade200,
           hintText: widget.hinttext,
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                style: BorderStyle.solid),
+            borderSide: BorderSide(style: BorderStyle.solid),
             borderRadius: BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
