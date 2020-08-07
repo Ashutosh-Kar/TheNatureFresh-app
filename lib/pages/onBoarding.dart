@@ -1,6 +1,7 @@
-import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:mushroomm/pages/loginwrapper.dart';
 
 class OnBoarding extends StatefulWidget {
   @override
@@ -41,9 +42,11 @@ class _OnBoardingState extends State<OnBoarding> {
         ],
         onDone: () {
           // When done button is press
+          Navigator.pushNamed(context, LoginWrapper.id);
         },
         onSkip: () {
           // You can also override onSkip callback
+          Navigator.pushNamed(context, LoginWrapper.id);
         },
         showSkipButton: true,
         skip: const Icon(Icons.skip_next),
