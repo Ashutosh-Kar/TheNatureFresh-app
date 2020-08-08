@@ -162,15 +162,6 @@ class _MushState extends State<Mush> {
                     MaterialPageRoute(builder: (context) => LoginPage()));
               },
             ),
-             ListTile(
-              leading: Icon(Icons.screen_share),
-              title: Text('Splash'),
-              onTap: () {
-               
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => OnBoarding()));
-              },
-            ),
           ],
         ),
       ),
