@@ -14,29 +14,20 @@ class _OnBoardingState extends State<OnBoarding> {
       child: IntroductionScreen(
         pages: [
           PageViewModel(
-            image: SvgPicture.asset('images/one.svg',height: 100,),
-            title: 'asd',
-            body: 'sdasdfdsfdsfd',
-            footer: RaisedButton.icon(onPressed: (){}, icon: Icon(Icons.ac_unit), label: Text('ad'))
-          ),
+            image: Center(child: SvgPicture.asset('images/one.svg',height: 200,width: 200,)),
+            titleWidget: Text('Select Item',style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),),
+            bodyWidget: Text('Order Mushroom and get delivery in the fastest time available in town',style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.center,),
+            ),
           PageViewModel(
-            image: SvgPicture.asset('images/one.svg'),
-            title: 'asd',
-            body: 'sdasdfdsfdsfd',
-            footer: RaisedButton.icon(onPressed: (){}, icon: Icon(Icons.ac_unit), label: Text('ad'))
-          ),
+            image: Center(child: SvgPicture.asset('images/two.svg',height: 200,width: 200,)),
+            titleWidget: Text('Enter Your Address',style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),),
+            bodyWidget: Text('Order Mushroom and get delivery in the fastest time available in town',style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.center,),
+            ),
           PageViewModel(
-            image: SvgPicture.asset('images/one.svg'),
-            title: 'asd',
-            body: 'sdasdfdsfdsfd',
-            footer: RaisedButton.icon(onPressed: (){}, icon: Icon(Icons.ac_unit), label: Text('ad'))
-          ),
-          PageViewModel(
-            image: SvgPicture.asset('images/one.svg'),
-            title: 'asd',
-            body: 'sdasdfdsfdsfd',
-            footer: RaisedButton.icon(onPressed: (){}, icon: Icon(Icons.ac_unit), label: Text('ad'))
-          ),
+            image: Center(child: SvgPicture.asset('images/three.svg',height: 200,width: 200,)),
+            titleWidget: Text('Delivery To Your Home',style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),),
+            bodyWidget: Text('Order Mushroom and get delivery in the fastest time available in town',style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.center,),
+            ),
           
         ],
         onDone: () {
