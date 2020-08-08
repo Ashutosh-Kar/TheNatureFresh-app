@@ -10,6 +10,9 @@ class LoginWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box('mushroom');
+    bool setupComplete = box.get('initStatus');
+
     return Consumer<UserRepository>(
       builder: (context, user, child) {
         print(user.status);

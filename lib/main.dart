@@ -7,11 +7,12 @@ import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/orderdetails.dart';
 import 'package:mushroomm/pages/categoriespage.dart';
+import 'package:mushroomm/pages/detailpage.dart';
 import 'package:mushroomm/pages/loginpage.dart';
 import 'package:mushroomm/pages/loginwrapper.dart';
+import 'package:mushroomm/pages/onBoarding.dart';
 import 'package:mushroomm/pages/paymentpage.dart';
 import 'package:mushroomm/pages/signuppage.dart';
-import 'package:mushroomm/pages/detailpage.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/cartpage.dart';
@@ -26,6 +27,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box('mushroom');
+    var initStatus = box.get('initStatus', defaultValue: false);
+    print(initStatus);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Cart>(
@@ -42,7 +46,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         home: CustomSplash(
           imagePath: 'images/logo1.png',
-          home: LoginWrapper(),          
+          home: !initStatus ? OnBoarding() : LoginWrapper(),
           duration: 2500,
           logoSize: 200,
           backGroundColor: Colors.white,
