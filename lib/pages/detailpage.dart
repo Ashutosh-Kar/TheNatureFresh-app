@@ -32,6 +32,7 @@ var b, c, d, e, f, g, h; // temporary
 
 class DetailPage extends StatefulWidget {
   static String id = 'detail_page';
+
   @override
   _DetailPageState createState() => _DetailPageState();
 }
@@ -45,10 +46,29 @@ class _DetailPageState extends State<DetailPage> {
   String landmark;
   String pincode;
   String phoneNumber;
+  UserRepository _user;
+
+  Future<void> getDetails() async {
+    setState(() {
+      var name = _user.firebaseuser.displayName?.split(" ");
+      firstName = name[0];
+      lastName = name.last;
+      phoneNumber = _user.user.phone_number;
+      var properAddress = _user.user.address;
+      var addressArr = properAddress.split(RegExp(r",\s(landmark:|pincode:)"));
+      address = addressArr[0] ?? '';
+      landmark = addressArr[1] ?? '';
+      pincode = addressArr[2] ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var _user = Provider.of<UserRepository>(context);
+    _user = Provider.of<UserRepository>(context);
+    if (_user.status == Status.Authenticated) {
+      print("user not null");
+      getDetails();
+    }
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.grey.shade300,
@@ -82,41 +102,40 @@ class _DetailPageState extends State<DetailPage> {
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 20),
-                  CustomTextField(iconfield: Icons.perm_identity, hinttext: 'First Name',
-
+                  CustomTextField(
+                    iconfield: Icons.perm_identity,
+                    hinttext: 'First Name',
                     validator: (String value) {
                       if (value.isEmpty) {
                         return 'Enter your first name';
                       }
                       return null;
                     },
-                    onsaved: (value){
+                    onsaved: (value) {
                       firstName = value;
                     },
+                    initialText: firstName,
                   ),
-                  CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Middle Name',
-                    onsaved: (value){
-                      c=value;
+                  CustomTextField(
+                    iconfield: Icons.perm_identity,
+                    hinttext: 'Last Name',
+                    onsaved: (value) {
+                      lastName = value;
+                      //store value
                     },
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return null;
+                        return 'Enter your last name';
                       }
                       return null;
-                    },),
-                  CustomTextField(iconfield: Icons.perm_identity, hinttext: 'Last Name',
-                      onsaved: (value){
-                        lastName = value;
-                        //store value
-                      },
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Enter your last name';
-                        }
-                        return null;
-                      }),
-                  CustomTextField(iconfield: Icons.home, hinttext: 'Full Address',
-                      onsaved: (value){
+                    },
+                    initialText: lastName,
+                  ),
+                  CustomTextField(
+                      initialText: address,
+                      iconfield: Icons.home,
+                      hinttext: 'Full Address',
+                      onsaved: (value) {
                         address = value;
                       },
                       validator: (String value) {
@@ -127,35 +146,44 @@ class _DetailPageState extends State<DetailPage> {
                       }),
                   Row(
                     children: <Widget>[
-                      Expanded(child: CustomTextField(
-                          iconfield: Icons.account_balance, hinttext: 'Landmark',
-                          onsaved: (value){
-                            landmark = value;
-                          },
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return 'Enter landmark';
-                            }
-                            return null;
-                          })),
+                      Expanded(
+                          child: CustomTextField(
+                              initialText: landmark,
+                              iconfield: Icons.account_balance,
+                              hinttext: 'Landmark',
+                              onsaved: (value) {
+                                landmark = value;
+                              },
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Enter landmark';
+                                }
+                                return null;
+                              })),
                       SizedBox(width: 10),
-                      Expanded(child: CustomTextField(
-                          iconfield: Icons.location_on,
-                          hinttext: 'Pincode',
-                          onsaved: (value){
-                            pincode = value;
-                          },
-                          validator: (String value) {
-                            if (value.isEmpty || !validator.isNumeric(value)) {
-                              return 'Enter proper pin code';
-                            }
-                            return null;
-                          }),
+                      Expanded(
+                        child: CustomTextField(
+                            initialText: pincode,
+                            iconfield: Icons.location_on,
+                            hinttext: 'Pincode',
+                            onsaved: (value) {
+                              pincode = value;
+                            },
+                            validator: (String value) {
+                              if (value.isEmpty ||
+                                  !validator.isNumeric(value)) {
+                                return 'Enter proper pin code';
+                              }
+                              return null;
+                            }),
                       ),
                     ],
                   ),
-                  CustomTextField(iconfield: Icons.phone, hinttext: 'Mobile Number',
-                      onsaved: (value){
+                  CustomTextField(
+                      initialText: phoneNumber,
+                      iconfield: Icons.phone,
+                      hinttext: 'Mobile Number',
+                      onsaved: (value) {
                         phoneNumber = value;
                       },
                       validator: (String value) {
@@ -181,22 +209,20 @@ class _DetailPageState extends State<DetailPage> {
                           if (response == true) {
                             await _user.fetchUserFromFirebase();
                             Navigator.pushNamed(context, Mush.id);
-                          }
-                          else {
+                          } else {
                             _scaffoldKey.currentState.showSnackBar(SnackBar(
                               content: Text(
-                                  "There was some error setting your details, please try again lager"),));
+                                  "There was some error setting your details, please try again lager"),
+                            ));
                             await _user.firebaseuser.delete();
                           }
                           //OR, can navigate to login page and ask for login
                           // credentials and then allow user to enter.
                         }
                       },
-                      child: Text('ADD DETAILS',style: TextStyle(
-                          color: Colors.white
-                      )),
+                      child: Text('ADD DETAILS',
+                          style: TextStyle(color: Colors.white)),
                     ),
-
                   ),
                 ],
               ),
@@ -209,15 +235,18 @@ class _DetailPageState extends State<DetailPage> {
 }
 
 class CustomTextField extends StatefulWidget {
-  CustomTextField(
-      {@required this.iconfield,
-      @required this.hinttext,
-      @required this.onsaved,
-      @required this.validator});
+  CustomTextField({@required this.iconfield,
+    @required this.hinttext,
+    @required this.onsaved,
+    @required this.validator,
+    @required this.initialText});
+
+  final initialText;
   final IconData iconfield;
   final String hinttext;
   final Function onsaved;
   final Function validator;
+
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
@@ -228,6 +257,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        initialValue: '${widget.initialText ?? ''}',
         validator: widget.validator,
         onChanged: widget.onsaved,
         decoration: InputDecoration(

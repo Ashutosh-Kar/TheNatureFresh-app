@@ -6,10 +6,9 @@ import 'package:mushroomm/info/customwidgets.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/models/cart.dart';
 import 'package:mushroomm/models/product.dart';
-import 'package:mushroomm/pages/Editinfo.dart';
 import 'package:mushroomm/pages/cartpage.dart';
+import 'package:mushroomm/pages/detailpage.dart';
 import 'package:mushroomm/pages/loginpage.dart';
-import 'package:mushroomm/pages/onBoarding.dart';
 import 'package:mushroomm/pages/orderhsitory.dart';
 import 'package:provider/provider.dart';
 
@@ -151,7 +150,7 @@ class _MushState extends State<Mush> {
               leading: Icon(Icons.edit),
               title: Text('Edit User Info'),
               onTap: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => EditInfo())),
+                  .push(MaterialPageRoute(builder: (context) => DetailPage())),
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app),

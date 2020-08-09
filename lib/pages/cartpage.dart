@@ -54,7 +54,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'A-13 Noida, Delhi-114672',
+                            '${context.watch<UserRepository>().user.address}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
