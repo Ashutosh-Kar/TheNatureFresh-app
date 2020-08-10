@@ -24,8 +24,8 @@ class Cart extends ChangeNotifier {
         return;
       }
     } else {
-      if (products[index].qty_available > products[index].qty_purchased) {
-        products[index].add();
+      if (product.qty_available > 1) {
+        products.add(product);
       }
       else{
         return;
@@ -51,6 +51,12 @@ class Cart extends ChangeNotifier {
       --itemCount;
       notifyListeners();
     }
+  }
+
+  void clear(){
+    products = List<Product>();
+    itemCount = 0;
+    notifyListeners();
   }
 
   factory Cart.fromJson(Map<String, dynamic> json) => _$CartFromJson(json);

@@ -346,7 +346,14 @@ class CardPopular extends StatelessWidget {
           CustomCardPopular(
             mimage: product.image_url,
             mprice1: 'Rs ${product.price}/120g',
-            onTap: () => context.read<Cart>().addProduct(product: product),
+            onTap: () {
+              if(product.qty_available == 0){
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Sorry! Item is out of stock"),));
+              }
+              else{
+                context.read<Cart>().addProduct(product: product);
+              }
+            },
           ),
           SizedBox(
             height: 10,

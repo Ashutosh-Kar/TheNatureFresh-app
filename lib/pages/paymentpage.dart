@@ -140,6 +140,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     total: orderDetails.total,
                     user_id: context.read<UserRepository>().firebaseuser.uid);
                 if (await _order.uploadOrder()) {
+                  context.read<Cart>().clear();
                   Navigator.pop(context);
                   confirmDialog(context);
                 }

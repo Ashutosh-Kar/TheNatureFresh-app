@@ -74,11 +74,25 @@ class Order {
       print('Order Id ${orderId}');
       this.orderid = orderId;
       print(jsonEncode(this));
+
+      var references = cart.products.map<DocumentReference>( (item)  {
+        return Firestore.instance.collection('products').document(item.id);
+      });
+
+      await Firestore.instance.runTransaction((transaction) async {
+        int i=0;
+        await references.forEach((element) async {
+          await transaction.update(element, {
+            'qty_available':FieldValue.increment(-1 * cart.products[i++].qty_purchased)
+          });
+        });
+      });
       await Firestore.instance
           .collection('orders')
           .document(this.id)
           .setData(this.toJson());
       await documentref.updateData({'orderId': FieldValue.increment(1)});
+
       return true;
     } catch (e) {
       print(e);
