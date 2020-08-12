@@ -140,9 +140,17 @@ class _LoginPageState extends State<LoginPage> {
                         ));
                       }
                     },
-                    child: Text(
-                      'LOGIN',
-                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    child: Consumer<UserRepository>(
+                      builder: (context,value,child){
+                        if(value.status == Status.Authenticating){
+                          return CircularProgressIndicator(
+                            backgroundColor: Colors.blue,
+                          );
+                        }
+                        else{
+                          return Text("Login");
+                        }
+                      },
                     ),
                   )),
               SizedBox(height: MediaQuery.of(context).size.height * 0.10),
