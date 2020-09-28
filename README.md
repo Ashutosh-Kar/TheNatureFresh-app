@@ -2,7 +2,7 @@
   <a href="" rel="noopener">
  <img width="250px" src="https://flutter.dev/assets/flutter-lockup-1caf6476beed76adec3c477586da54de6b552b2f42108ec5bc68dc63bae2df75.png" alt="Project logo"></a>
  &nbsp;
- <img width="250px" src="https://github.com/iot-lab-kiit/TheNatureFresh-app/blob/master/images/logo1.png?raw=true" alt="logo"></a>
+ <img width="150px" src="https://github.com/iot-lab-kiit/TheNatureFresh-app/blob/master/images/logo1.png?raw=true" alt="logo"></a>
 </p>
 <h3 align="center">The Nature Fresh - App</h3>
 
