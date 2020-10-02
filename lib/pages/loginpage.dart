@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.height * 0.14),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.15),
               Image.asset(
                 'images/logo1.png',
                 height: 150,
@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: MediaQuery.of(context).size.height * 0.07),
               Padding(
                   padding:
-                      const EdgeInsets.only(top: 10.0, left: 80, right: 80),
+                  const EdgeInsets.only(top: 10.0, left: 80, right: 80),
                   child: MaterialButton(
                     padding: EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                   )),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.10),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               // Padding(
               //     padding:
               //         const EdgeInsets.only(top: 10.0, left: 70, right: 70),
@@ -170,27 +170,26 @@ class _LoginPageState extends State<LoginPage> {
               //     )),
               Padding(
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: Column(
-                  children: <Widget>[
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Text(
                       'Don\'t have an account?',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     SizedBox(
-                      height: 10,
+                      width: 5,
                     ),
-                    MaterialButton(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      minWidth: 80,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      color: Color.fromRGBO(101, 151, 57, 1),
-                      onPressed: () {
-                        Navigator.pushNamed(context, SignupPage.id);
-                      },
-                      child: Text('SIGN UP',
-                          style: TextStyle(color: Colors.white)),
+                    InkWell(
+                      onTap: () => Navigator.pushNamed(context, SignupPage.id),
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(101, 151, 57, 1),
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mushroomm/models/UserRepository.dart';
 import 'package:mushroomm/pages/detailpage.dart';
+import 'package:mushroomm/pages/loginpage.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -127,20 +128,12 @@ class _SignupPageState extends State<SignupPage> {
                     padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          'There you go!',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 20,),
-                       MaterialButton(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    minWidth: 250,
-                    color: Color.fromRGBO(101, 151, 57, 1),
+                        MaterialButton(
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          minWidth: 250,
+                          color: Color.fromRGBO(101, 151, 57, 1),
                           onPressed: () async {
                             print('clik');
                             if (await _userRepository.signUp(
@@ -148,14 +141,38 @@ class _SignupPageState extends State<SignupPage> {
                               Navigator.pushNamed(context, DetailPage.id);
                             } else {
                               _scaffoldState.currentState.showSnackBar(SnackBar(
-                                content:
-                                    Text("Invalid Email or Password format",
+                                  content:
+                                  Text("Invalid Email or Password format",
                                     style: TextStyle(color: Colors.white,),
-                              )));
+                                  )));
                             }
                           },
                           child: Text('SIGN UP',
                               style: TextStyle(color: Colors.white, fontSize: 22)),
+                        ),
+                        SizedBox(height: 20,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Already have an account?',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            InkWell(
+                              onTap: () => Navigator.pushNamed(context, LoginPage.id),
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(101, 151, 57, 1),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
